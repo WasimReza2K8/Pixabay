@@ -16,7 +16,6 @@
 
 package com.jet.feature.detail.presentation.viewmodel
 
-
 import com.example.core.ui.viewmodel.ErrorEvent
 import com.example.core.ui.viewmodel.ViewEvent
 import com.example.core.ui.viewmodel.ViewState

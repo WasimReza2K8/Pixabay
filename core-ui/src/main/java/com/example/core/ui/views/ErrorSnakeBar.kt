@@ -37,7 +37,7 @@ fun <UiEvent : ViewEvent> ErrorSnakeBar(
             when (result) {
                 Dismissed -> sendEvent(snakeBarDismissedEvent)
                 else -> {
-                    //do nothing
+                    // do nothing
                 }
             }
         }

@@ -38,6 +38,7 @@ import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSele
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSelectDecline
 import com.jet.feature.search.presentation.viewmodel.SearchContract.FRUITS
 import com.jet.feature.search.presentation.viewmodel.SearchContract.State
+import com.jet.search.domain.model.Photo
 import com.jet.search.presentation.mapper.toPhotoUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -125,23 +126,7 @@ class SearchViewModel @Inject constructor(
                     updateState { copy(isLoading = false) }
                     when (output) {
                         is Success -> {
-                            if (output.result.isEmpty()) {
-                                updateState {
-                                    copy(
-                                        infoText = resourceProvider.getString(string.no_photo),
-                                        photos = emptyList()
-                                    )
-                                }
-                            } else {
-                                updateState {
-                                    copy(
-                                        infoText = "",
-                                        photos = output.result.map {
-                                            it.toPhotoUiModel()
-                                        }
-                                    )
-                                }
-                            }
+                            handleSuccess(output)
                         }
                         NetworkError -> {
                             updateState {
@@ -151,7 +136,6 @@ class SearchViewModel @Inject constructor(
                                     )
                                 )
                             }
-
                         }
                         UnknownError -> {
                             updateState {
@@ -164,6 +148,26 @@ class SearchViewModel @Inject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    private fun handleSuccess(output: Success<List<Photo>>) {
+        if (output.result.isEmpty()) {
+            updateState {
+                copy(
+                    infoText = resourceProvider.getString(string.no_photo),
+                    photos = emptyList()
+                )
+            }
+        } else {
+            updateState {
+                copy(
+                    infoText = "",
+                    photos = output.result.map {
+                        it.toPhotoUiModel()
+                    }
+                )
+            }
         }
     }
 }

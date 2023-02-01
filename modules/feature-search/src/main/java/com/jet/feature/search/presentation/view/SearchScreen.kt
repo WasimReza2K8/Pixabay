@@ -63,9 +63,7 @@ private fun SearchScreenImpl(
                 onValueChange = { query ->
                     sendEvent(OnSearch(query))
                 },
-                onClick = {
-                    sendEvent(OnQueryClearClicked)
-                }
+                onClick = { sendEvent(OnQueryClearClicked) }
             )
         },
     ) { scaffoldPadding ->
@@ -100,9 +98,7 @@ private fun SearchScreenImpl(
 
         if (state.isLoading) {
             CircularProgressIndicator(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center),
+                modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center),
             )
         }
 
