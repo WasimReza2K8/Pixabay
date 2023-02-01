@@ -22,12 +22,13 @@ import com.example.core.state.Output.Success
 import com.example.core.state.Output.UnknownError
 import com.jet.feature.detail.utils.TestDispatcherProvider
 import com.jet.feature.detail.utils.photo
+import com.jet.search.domain.model.Photo
 import com.jet.search.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class DetailUseCaseTest {
@@ -39,34 +40,30 @@ class DetailUseCaseTest {
     )
 
     @Test
-    fun `Given valid localId with valid response, When invoked, Then return photo`() =
+    fun `Given valid localId with valid response, When invoked, Then return success output having photo`() =
         runTest {
             // Given
             val given = photo
             val expected = Success(given)
             val id = "localId"
-            coEvery {
-                repository.getPhotoById(any())
-            } returns flow { emit(given) }
+            mockRepository(given)
 
             useCase.invoke(id).test {
-                assertEquals(expected, awaitItem())
+                assertThat(expected == awaitItem()).isTrue
                 awaitComplete()
             }
         }
 
     @Test
-    fun `Given valid localId with null response, When invoked, Then no photo`() =
+    fun `Given valid localId with null response, When invoked, Then returns output containing null`() =
         runTest {
             // Given
             val expected = Success(null)
             val id = "localId"
-            coEvery {
-                repository.getPhotoById(any())
-            } returns flow { emit(null) }
+            mockRepository(null)
 
             useCase.invoke(id).test {
-                assertEquals(expected, awaitItem())
+                assertThat(expected == awaitItem()).isTrue
                 awaitComplete()
             }
         }
@@ -82,9 +79,14 @@ class DetailUseCaseTest {
             } returns flow { throw RuntimeException() }
 
             useCase.invoke(id).test {
-                assertEquals(expected, awaitItem())
+                assertThat(expected == awaitItem()).isTrue
                 awaitComplete()
             }
         }
 
+    private fun mockRepository(photo: Photo?) = runTest {
+        coEvery {
+            repository.getPhotoById(any())
+        } returns flow { emit(photo) }
+    }
 }

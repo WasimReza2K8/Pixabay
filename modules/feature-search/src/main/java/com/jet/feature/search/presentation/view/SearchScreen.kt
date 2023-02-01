@@ -7,19 +7,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.theme.JetTheme
+import com.example.core.ui.views.HandleError
 import com.example.core.ui.views.SearchBar
 import com.jet.feature.search.R
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event
+import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnPhotoClicked
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnQueryClearClicked
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSearch
@@ -28,7 +32,6 @@ import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSele
 import com.jet.feature.search.presentation.viewmodel.SearchContract.State
 import com.jet.feature.search.presentation.viewmodel.SearchViewModel
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
     val state: State by viewModel.viewState.collectAsStateWithLifecycle()
@@ -43,7 +46,16 @@ private fun SearchScreenImpl(
     state: State,
     sendEvent: (event: Event) -> Unit,
 ) {
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    HandleError(
+        errorEvent = state.errorEvent,
+        snackBarHostState = snackBarHostState,
+        sendEvent = sendEvent,
+        snakeBarDismissedEvent = OnErrorSnakeBarDismissed,
+    )
     Scaffold(
+        scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState),
         topBar = {
             SearchBar(
                 hint = "Search",

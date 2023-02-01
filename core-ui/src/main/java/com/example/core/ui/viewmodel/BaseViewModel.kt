@@ -1,4 +1,4 @@
-package com.example.core.viewmodel
+package com.example.core.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,3 +41,8 @@ abstract class BaseViewModel<UiEvent : ViewEvent, UiState : ViewState> : ViewMod
 interface ViewState
 
 interface ViewEvent
+
+sealed interface ErrorEvent {
+    data class NetworkError(val message: String) : ErrorEvent
+    data class UnknownError(val message: String) : ErrorEvent
+}

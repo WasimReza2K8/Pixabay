@@ -21,8 +21,10 @@ import com.example.core.state.Output
 import com.example.core.state.Output.NetworkError
 import com.example.core.state.Output.UnknownError
 import com.example.core.ui.R.string
+import com.example.core.ui.viewmodel.ErrorEvent
 import com.jet.detail.presentation.DetailLauncher
 import com.jet.feature.search.domain.usecase.SearchUseCase
+import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnPhotoClicked
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnQueryClearClicked
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSearch
@@ -36,7 +38,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -93,35 +94,35 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `Given valid photos, When viewModel init, Then returns valid photos`() =
+    fun `Given valid photos as output, When viewModel init, Then viewState contains valid photos`() =
         runTest {
             val expected = listOf(photoUi)
             val given = Output.Success(listOf(photo))
-            initSuccessReturningMock(given)
+            mockUseCase(given)
 
             createViewModel()
             advanceTimeBy(1000)
 
-            assertEquals(expected, viewModel.viewState.value.photos)
+            assertThat(expected == viewModel.viewState.value.photos).isTrue
         }
 
     @Test
-    fun `Given valid query, When onSearch starts, Then return no photos`() =
+    fun `Given valid query but empty output, When onSearch starts, Then viewState contains no photos`() =
         runTest {
             val expected = emptyList<PhotoUiModel>()
             val given = Output.Success(emptyList<Photo>())
-            initSuccessReturningMock(given)
+            mockUseCase(given)
 
             viewModel.onUiEvent(OnSearch("de"))
             advanceTimeBy(1000)
-            assertEquals(expected, viewModel.viewState.value.photos)
+            assertThat(expected == viewModel.viewState.value.photos).isTrue
         }
 
     @Test
-    fun `Given valid query, When onSearch starts, Then return infoText not empty`() =
+    fun `Given valid query but empty output, When onSearch starts, Then viewState contains infoText not empty`() =
         runTest {
             val given = Output.Success(emptyList<Photo>())
-            initSuccessReturningMock(given)
+            mockUseCase(given)
 
             viewModel.onUiEvent(OnSearch("de"))
             advanceTimeBy(1000)
@@ -129,23 +130,23 @@ class SearchViewModelTest {
         }
 
     @Test
-    fun `Given valid query, When onSearch starts, Then return valid list of photos`() =
+    fun `Given valid query with success output having photos, When onSearch starts, Then viewState contains list of photos`() =
         runTest {
             val expected = listOf(photoUi)
             val given = Output.Success(listOf(photo))
-            initSuccessReturningMock(given)
+            mockUseCase(given)
 
             viewModel.onUiEvent(OnSearch("de"))
             advanceTimeBy(1000)
 
-            assertEquals(expected, viewModel.viewState.value.photos)
+            assertThat(expected == viewModel.viewState.value.photos).isTrue
         }
 
     @Test
-    fun `Given valid query, When onSearch starts, Then viewState contains empty infoText`() =
+    fun `Given valid query with success output having photos, When onSearch starts, Then viewState contains empty infoText`() =
         runTest {
             val given = Output.Success(listOf(photo))
-            initSuccessReturningMock(given)
+            mockUseCase(given)
 
             viewModel.onUiEvent(OnSearch("de"))
             advanceTimeBy(1000)
@@ -154,7 +155,7 @@ class SearchViewModelTest {
         }
 
     @Test
-    fun `Given changing query, When onSearch use case called, Then returns single result`() =
+    fun `Given changing query with success output having photos, When onSearch use case called, Then returns single result`() =
         runTest {
             val given = Output.Success(listOf(photo))
             coEvery {
@@ -169,7 +170,7 @@ class SearchViewModelTest {
         }
 
     @Test
-    fun `Given empty query, When onSearch starts, Then use case not called`() =
+    fun `Given empty query, When onSearch starts, Then use case is not called`() =
         runTest {
             initGettingEmptyQuery()
             verify(exactly = 0) { searchUseCase("") }
@@ -184,7 +185,7 @@ class SearchViewModelTest {
         }
 
     @Test
-    fun `Given empty query, When onSearch starts, Then viewState infoText is empty`() =
+    fun `Given empty query, When onSearch starts, Then viewState infoText having information`() =
         runTest {
             initGettingEmptyQuery()
             verify(exactly = 0) { searchUseCase("") }
@@ -213,32 +214,29 @@ class SearchViewModelTest {
         }
 
     @Test
-    fun `Given network error in UseCase, When onSearch starts, Then return network error infoText`() =
+    fun `Given network error in UseCase, When onSearch starts, Then viewState contains network error event`() =
         runTest {
             val given = NetworkError
-            coEvery {
-                searchUseCase("de")
-            } returns flow { emit(given) }
+            mockUseCase(given)
 
             viewModel.onUiEvent(OnSearch("de"))
             advanceTimeBy(1000)
             viewModel.viewState.take(1).collectLatest {
-                assertEquals(networkError, it.infoText)
+                assertThat(networkError == (it.errorEvent as ErrorEvent.NetworkError).message).isTrue
             }
         }
 
     @Test
-    fun `Given unknown error, When onSearch starts, Then return unknown error message in infoText`() =
+    fun `Given unknown error in UseCase, When onSearch starts, Then viewState contains unknown error event`() =
         runTest {
             val given = UnknownError
-            coEvery {
-                searchUseCase("de")
-            } returns flow { emit(given) }
+            mockUseCase(given)
 
             viewModel.onUiEvent(OnSearch("de"))
             advanceTimeBy(1000)
+
             viewModel.viewState.take(1).collectLatest {
-                assertEquals(unknownError, it.infoText)
+                assertThat(unknownError == (it.errorEvent as ErrorEvent.UnknownError).message).isTrue
             }
         }
 
@@ -247,22 +245,22 @@ class SearchViewModelTest {
         runTest {
             viewModel.onUiEvent(OnPhotoClicked("photoId"))
             viewModel.viewState.take(1).collectLatest {
-                assertEquals(it.isDialogShowing, true)
+                assertThat(it.isDialogShowing).isTrue
             }
         }
 
     @Test
-    fun `When photo selection confirmed, Then viewState isDialogShowing become false`() =
+    fun `When photo selection confirmed, Then viewState contains isDialogShowing become false`() =
         runTest {
             viewModel.onUiEvent(OnPhotoClicked("photoId"))
             viewModel.onUiEvent(OnSelectConfirmed)
             viewModel.viewState.take(1).collectLatest {
-                assertEquals(it.isDialogShowing, false)
+                assertThat(it.isDialogShowing).isFalse
             }
         }
 
     @Test
-    fun `When photo selection confirmed, Then navigate to detail`() {
+    fun `When photo selection is confirmed, Then navigate to detail`() {
         every {
             detailLauncher.route(any())
         } returns "detail/photoId"
@@ -274,15 +272,24 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `When onSelectionDecline clicked, Then viewState isDialogShowing become false`() =
+    fun `When onSelectionDecline is clicked, Then viewState contains isDialogShowing become false`() =
         runTest {
             viewModel.onUiEvent(OnSelectDecline)
             viewModel.viewState.take(1).collectLatest {
-                assertEquals(it.isDialogShowing, false)
+                assertThat(it.isDialogShowing).isFalse
             }
         }
 
-    private fun initSuccessReturningMock(given: Output<List<Photo>>) =
+    @Test
+    fun `When OnErrorSnakeBarDismissed is happened, Then in viewState errorEvent become null`() =
+        runTest {
+            viewModel.onUiEvent(OnErrorSnakeBarDismissed)
+            viewModel.viewState.take(1).collectLatest {
+                assertThat(it.errorEvent == null).isTrue
+            }
+        }
+
+    private fun mockUseCase(given: Output<List<Photo>>) =
         runTest {
             coEvery {
                 searchUseCase(any())

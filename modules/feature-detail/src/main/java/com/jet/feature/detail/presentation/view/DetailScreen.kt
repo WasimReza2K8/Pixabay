@@ -27,12 +27,14 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -41,17 +43,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.theme.JetTheme
-import com.example.core.ui.views.PhotoWithInfoComponent
+import com.example.core.ui.views.HandleError
+import com.example.core.ui.views.PhotoWithInfoView
 import com.jet.feature.detail.R
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnBackButtonClicked
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnErrorSnakeBarDismissed
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.State
 import com.jet.feature.detail.presentation.viewmodel.DetailViewModel
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {
     val state: State by viewModel.viewState.collectAsStateWithLifecycle()
@@ -66,8 +68,16 @@ private fun DetailScreenImpl(
     state: State,
     sendEvent: (event: Event) -> Unit,
 ) {
+    val snackBarHostState = remember { SnackbarHostState() }
 
-    Scaffold { scaffoldPadding ->
+    HandleError(
+        errorEvent = state.errorEvent,
+        snackBarHostState = snackBarHostState,
+        sendEvent = sendEvent,
+        snakeBarDismissedEvent = OnErrorSnakeBarDismissed,
+    )
+
+    Scaffold(scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState)) { scaffoldPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -82,11 +92,10 @@ private fun DetailScreenImpl(
                 )
             }
             val photo = state.photo
-            val errorMessage = state.errorMessage
             if (photo != null) {
-                PhotoWithInfoComponent(
-                    text1 = photo.userName,
-                    text2 = photo.tags,
+                PhotoWithInfoView(
+                    userName = photo.userName,
+                    tags = photo.tags,
                     imageUrl = photo.largeImageURL
                 ) {
                     Row(
@@ -106,15 +115,6 @@ private fun DetailScreenImpl(
                             painter = painterResource(id = R.drawable.detail_ic_download)
                         )
                     }
-                }
-            } else if (errorMessage != null) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = errorMessage)
                 }
             }
         }

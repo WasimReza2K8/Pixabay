@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.JetTheme
-import com.example.core.ui.views.PhotoWithInfoComponent
+import com.example.core.ui.views.PhotoWithInfoView
 import com.jet.feature.search.R
 import com.jet.search.presentation.model.PhotoUiModel
 
@@ -32,9 +32,9 @@ fun PhotoListItem(
         }
         .testTag(stringResource(id = R.string.search_item))
     ) {
-        PhotoWithInfoComponent(
-            text1 = photo.userName,
-            text2 = photo.tags,
+        PhotoWithInfoView(
+            userName = photo.userName,
+            tags = photo.tags,
             imageUrl = photo.previewURL
         )
     }

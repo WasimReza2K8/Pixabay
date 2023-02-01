@@ -11,7 +11,7 @@ data class Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
-    val button: TextStyle = TextStyle(
+    val body2: TextStyle = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
         fontSize = 14.sp

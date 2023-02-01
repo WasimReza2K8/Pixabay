@@ -12,7 +12,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 
 @Composable
-fun ImageComponent(
+fun ImageView(
     url: String,
     contentScale: ContentScale,
     modifier: Modifier = Modifier,

@@ -17,7 +17,4 @@ interface PhotoDao {
 
     @Query("SELECT * FROM photo_table WHERE local_id = :id")
     fun getPhoto(id: String): Flow<PhotoEntity>
-
-    @Query("DELETE FROM photo_table")
-    suspend fun deleteAll()
 }
