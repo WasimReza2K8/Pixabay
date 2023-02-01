@@ -17,17 +17,19 @@
 package com.jet.feature.search.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.example.core.R
 import com.example.core.navigation.Navigator
 import com.example.core.resProvider.ResourceProvider
 import com.example.core.state.Output.NetworkError
 import com.example.core.state.Output.Success
 import com.example.core.state.Output.UnknownError
 import com.example.core.ui.R.string
-import com.example.core.viewmodel.BaseViewModel
+import com.example.core.ui.viewmodel.BaseViewModel
+import com.example.core.ui.viewmodel.ErrorEvent
 import com.jet.detail.presentation.DetailLauncher
 import com.jet.feature.search.BuildConfig.DEBOUNCE_TIME
 import com.jet.feature.search.domain.usecase.SearchUseCase
+import com.jet.feature.search.presentation.viewmodel.SearchContract.Event
+import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnInitViewModel
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnPhotoClicked
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnQueryClearClicked
@@ -36,6 +38,7 @@ import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSele
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSelectDecline
 import com.jet.feature.search.presentation.viewmodel.SearchContract.FRUITS
 import com.jet.feature.search.presentation.viewmodel.SearchContract.State
+import com.jet.search.domain.model.Photo
 import com.jet.search.presentation.mapper.toPhotoUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -53,7 +56,7 @@ class SearchViewModel @Inject constructor(
     private val resourceProvider: ResourceProvider,
     private val navigator: Navigator,
     private val detailLauncher: DetailLauncher,
-) : BaseViewModel<SearchContract.Event, State>() {
+) : BaseViewModel<Event, State>() {
 
     override fun provideInitialState() = State()
 
@@ -64,7 +67,7 @@ class SearchViewModel @Inject constructor(
         onUiEvent(OnInitViewModel)
     }
 
-    override fun handleEvent(event: SearchContract.Event) {
+    override fun handleEvent(event: Event) {
         when (event) {
             is OnInitViewModel -> {
                 startQuery()
@@ -90,6 +93,9 @@ class SearchViewModel @Inject constructor(
             }
             is OnSelectDecline -> {
                 updateState { copy(isDialogShowing = false) }
+            }
+            is OnErrorSnakeBarDismissed -> {
+                updateState { copy(errorEvent = null) }
             }
         }
     }
@@ -120,32 +126,48 @@ class SearchViewModel @Inject constructor(
                     updateState { copy(isLoading = false) }
                     when (output) {
                         is Success -> {
-                            if (output.result.isEmpty()) {
-                                updateState {
-                                    copy(
-                                        infoText = resourceProvider.getString(string.no_photo),
-                                        photos = emptyList()
-                                    )
-                                }
-                            } else {
-                                updateState {
-                                    copy(
-                                        infoText = "",
-                                        photos = output.result.map {
-                                            it.toPhotoUiModel()
-                                        }
-                                    )
-                                }
-                            }
+                            handleSuccess(output)
                         }
                         NetworkError -> {
-                            updateState { copy(infoText = resourceProvider.getString(R.string.network_error)) }
+                            updateState {
+                                copy(
+                                    errorEvent = ErrorEvent.NetworkError(
+                                        resourceProvider.getString(string.network_error)
+                                    )
+                                )
+                            }
                         }
                         UnknownError -> {
-                            updateState { copy(infoText = resourceProvider.getString(R.string.unknown_error)) }
+                            updateState {
+                                copy(
+                                    errorEvent = ErrorEvent.UnknownError(
+                                        resourceProvider.getString(string.unknown_error)
+                                    )
+                                )
+                            }
                         }
                     }
                 }
+        }
+    }
+
+    private fun handleSuccess(output: Success<List<Photo>>) {
+        if (output.result.isEmpty()) {
+            updateState {
+                copy(
+                    infoText = resourceProvider.getString(string.no_photo),
+                    photos = emptyList()
+                )
+            }
+        } else {
+            updateState {
+                copy(
+                    infoText = "",
+                    photos = output.result.map {
+                        it.toPhotoUiModel()
+                    }
+                )
+            }
         }
     }
 }

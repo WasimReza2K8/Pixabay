@@ -16,23 +16,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import com.example.core.ui.R
 import com.example.core.ui.theme.JetTheme
 
 @Composable
-fun PhotoWithInfoComponent(
-    text1: String,
-    text2: String,
+fun PhotoWithInfoView(
+    userName: String,
+    tags: String,
     imageUrl: String,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
     Box(modifier = modifier
         .fillMaxSize()
-        .testTag(stringResource(id = R.string.photo_text_component))
+        .testTag(stringResource(id = R.string.photo_text_view))
     ) {
-        ImageComponent(
+        ImageView(
             url = imageUrl,
             contentScale = ContentScale.FillWidth,
             modifier = modifier
@@ -44,14 +43,14 @@ fun PhotoWithInfoComponent(
                 .background(color = JetTheme.color.background)
         ) {
             Text(
-                text = text1,
-                fontSize = 14.sp,
+                text = userName,
+                style = JetTheme.typography.body2,
                 color = JetTheme.color.grey200,
                 modifier = Modifier.padding(horizontal = JetTheme.spacing.spacing4),
             )
             Text(
-                text = text2,
-                fontSize = 14.sp,
+                text = tags,
+                style = JetTheme.typography.caption,
                 color = JetTheme.color.teal200,
                 modifier = Modifier.padding(horizontal = JetTheme.spacing.spacing4),
             )
@@ -65,14 +64,18 @@ fun PhotoWithInfoComponent(
 private fun ImageTextPreview() {
     JetTheme {
         Column(modifier = Modifier.fillMaxSize()) {
-            PhotoWithInfoComponent(
-                text1 = "userName",
-                text2 = "tags",
+            PhotoWithInfoView(
+                userName = "userName",
+                tags = "tags",
                 modifier = Modifier,
                 imageUrl = "imageUrl"
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "inner Text")
+                    Text(
+                        text = "inner Text",
+                        style = JetTheme.typography.caption,
+                        color = JetTheme.color.teal200
+                    )
                 }
             }
         }

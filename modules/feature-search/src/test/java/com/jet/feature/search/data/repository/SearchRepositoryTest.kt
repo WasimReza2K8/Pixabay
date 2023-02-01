@@ -24,7 +24,7 @@ class SearchRepositoryTest {
     )
 
     @Test
-    fun `Given api success api response, When searchPhoto called, Then valid photos are emitted`() =
+    fun `Given success api response, When searchPhoto called, Then valid photos are emitted`() =
         runTest {
             val given = ResponseDto(listOf(photoDto))
             val expected = listOf(photo)
@@ -115,9 +115,9 @@ class SearchRepositoryTest {
         }
 
     @Test
-    fun `Given db provide, When getPhotoById called, Then returns valid photo`() =
+    fun `Given db provide exception, When getPhotoById called, Then throws the exception`() =
         runTest {
-            val given = IOException()
+            val given = RuntimeException()
             coEvery {
                 dao.getPhoto(any())
             } returns flow { throw given }

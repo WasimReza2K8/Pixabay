@@ -52,7 +52,7 @@ class DetailScreenTest {
         androidComposeTestRule.apply {
             onNodeWithTag(activity.getString(string.search_item)).performClick()
             onNodeWithText(activity.getString(string.search_confirmation_yes)).performClick()
-            onNodeWithTag(activity.getString(R.string.photo_text_component)).assertIsDisplayed()
+            onNodeWithTag(activity.getString(R.string.photo_text_view)).assertIsDisplayed()
         }
     }
 

@@ -21,11 +21,14 @@ import com.example.core.R
 import com.example.core.navigation.Navigator
 import com.example.core.resProvider.ResourceProvider
 import com.example.core.state.Output
+import com.example.core.ui.viewmodel.ErrorEvent.UnknownError
 import com.jet.feature.detail.domain.usecase.DetailUseCase
 import com.jet.feature.detail.presentation.launcher.DetailLauncherImpl
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnBackButtonClicked
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnErrorSnakeBarDismissed
 import com.jet.feature.detail.utils.photo
 import com.jet.feature.detail.utils.photoUi
+import com.jet.search.domain.model.Photo
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -75,15 +78,9 @@ class DetailViewModelTest {
     @Test
     fun `Given valid photo, When DetailUseCase invoked, Then view state having photo`() =
         runTest {
-            val localId = "localId"
             val given = Output.Success(photo)
-            coEvery {
-                useCase.invoke(any())
-            } returns flow { emit(given) }
-
-            every {
-                savedStateHandle.get<String>(DetailLauncherImpl.LOCAL_ID)
-            } returns localId
+            mockUseCase(given)
+            mockSaveStateHandle("localId")
 
             createViewModel()
 
@@ -93,35 +90,58 @@ class DetailViewModelTest {
         }
 
     @Test
-    fun `Given unknown error, When DetailUseCase invoked, Then view state error message`() =
+    fun `Given unknown error from DetailUseCase, When DetailUseCase invoked, Then view state contains error message`() =
         runTest {
-            val localId = "localId"
             val given = Output.UnknownError
-            coEvery {
-                useCase.invoke(any())
-            } returns flow { emit(given) }
-
-            every {
-                savedStateHandle.get<String>(DetailLauncherImpl.LOCAL_ID)
-            } returns localId
+            mockUseCase(given)
+            mockSaveStateHandle("localId")
 
             createViewModel()
 
             viewModel.viewState.take(1).collectLatest {
-                assertThat(it.errorMessage == unknownError).isTrue
+                assertThat((it.errorEvent as UnknownError).message == unknownError).isTrue
             }
         }
 
     @Test
     fun `When OnBackButtonClicked, Then navigateUp called`() {
-        every {
-            savedStateHandle.get<String>(DetailLauncherImpl.LOCAL_ID)
-        } returns "localId"
+        mockSaveStateHandle("localId")
 
         createViewModel()
         viewModel.onUiEvent(OnBackButtonClicked)
 
         verify(exactly = 1) { navigator.navigateUp() }
+    }
+
+    @Test
+    fun `When OnErrorSnakeBarDismissed is happened, Then in viewState errorEvent become null`() =
+        runTest {
+            mockSaveStateHandle("localId")
+            createViewModel()
+            viewModel.onUiEvent(OnErrorSnakeBarDismissed)
+            viewModel.viewState.take(1).collectLatest {
+                assertThat(it.errorEvent).isNull()
+            }
+
+        }
+
+    @Test
+    fun `Given id is empty, When init viewModel, Then DetailUseCase never called`() {
+        mockSaveStateHandle("")
+        createViewModel()
+        verify(exactly = 0) { useCase.invoke("") }
+    }
+
+    private fun mockSaveStateHandle(localId: String) {
+        every {
+            savedStateHandle.get<String>(DetailLauncherImpl.LOCAL_ID)
+        } returns localId
+    }
+
+    private fun mockUseCase(given: Output<Photo>) = runTest {
+        coEvery {
+            useCase.invoke(any())
+        } returns flow { emit(given) }
     }
 
     @org.junit.After

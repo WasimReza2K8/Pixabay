@@ -43,15 +43,13 @@ class SearchUseCaseTest {
     )
 
     @Test
-    fun `Given valid query with valid response, When invoked, Then return valid list of photos`() =
+    fun `Given valid query with valid response, When invoked, Then returns output with valid list of photos`() =
         runTest {
             // Given
             val given = listOf(photo)
             val expected = Success(given)
             val query = "De"
-            coEvery {
-                repository.searchPhoto(any())
-            } returns flow { emit(given) }
+            mockRepository(given)
 
             useCase.invoke(query).test {
                 assertEquals(expected, awaitItem())
@@ -60,14 +58,12 @@ class SearchUseCaseTest {
         }
 
     @Test
-    fun `Given valid query with empty list, When invoked, Then returns empty list of photos`() =
+    fun `Given valid query with empty photo response, When invoked, Then returns output with empty list of photos`() =
         runTest {
             // Given
             val expected = Success(emptyList<Photo>())
             val query = "fa"
-            coEvery {
-                repository.searchPhoto(any())
-            } returns flow { emit(emptyList()) }
+            mockRepository(emptyList())
 
             useCase.invoke(query).test {
                 assertEquals(expected, awaitItem())
@@ -108,7 +104,7 @@ class SearchUseCaseTest {
         }
 
     @Test
-    fun `Given query string with multiple whitespaces, When invoked, Then called repository having query string with no space`() =
+    fun `Given query string with multiple whitespaces, When invoked, Then called repository having query with a + sign`() =
         runTest {
             val given = "test        query"
             val expected = "test+query"
@@ -120,7 +116,7 @@ class SearchUseCaseTest {
         }
 
     @Test
-    fun `Given query string with a whitespace, When invoked, Then called repository having query string with no space`() =
+    fun `Given query string with a whitespace, When invoked, Then called repository having query with a + sign`() =
         runTest {
             val given = "test query"
             val expected = "test+query"
@@ -130,5 +126,11 @@ class SearchUseCaseTest {
                 awaitComplete()
             }
         }
+
+    private fun mockRepository(photos: List<Photo>) = runTest {
+        coEvery {
+            repository.searchPhoto(any())
+        } returns flow { emit(photos) }
+    }
 
 }

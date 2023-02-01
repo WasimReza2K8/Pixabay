@@ -30,8 +30,8 @@ fun SearchBar(
     value: String,
     onValueChange: (String) -> Unit,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     hint: String,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         shape = JetTheme.shape.roundCorner16,

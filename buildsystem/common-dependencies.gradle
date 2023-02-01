@@ -12,6 +12,7 @@ android {
         targetSdkVersion androidConfig.targetSdkVersion
         versionName androidConfig.buildVersionName
         versionCode androidConfig.buildNumber
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
 
@@ -50,6 +51,7 @@ android {
         freeCompilerArgs += '-opt-in=kotlinx.serialization.ExperimentalSerializationApi'
         freeCompilerArgs += '-opt-in=androidx.compose.material.ExperimentalMaterialApi'
         freeCompilerArgs += '-opt-in=androidx.compose.ui.ExperimentalComposeUiApi'
+        freeCompilerArgs += '-opt-in=androidx.lifecycle.compose.ExperimentalLifecycleComposeApi'
         jvmTarget = '11'
     }
 

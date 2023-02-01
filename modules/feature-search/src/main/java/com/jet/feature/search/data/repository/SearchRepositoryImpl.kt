@@ -35,9 +35,9 @@ class SearchRepositoryImpl @Inject constructor(
 
     private suspend fun handleNetworkException(
         query: String,
-        exception: Throwable,
+        error: Throwable,
     ): List<Photo> = getLocalPhotos(query).ifEmpty {
-        throw exception
+        throw error
     }
 
     override fun getPhotoById(id: String): Flow<Photo?> =
@@ -45,7 +45,6 @@ class SearchRepositoryImpl @Inject constructor(
             it.toDomainPhoto()
         }
 
-    private suspend fun getLocalPhotos(query: String): List<Photo> {
-        return photoDao.queryPhotos(query).map { it.toDomainPhoto() }
-    }
+    private suspend fun getLocalPhotos(query: String): List<Photo> =
+        photoDao.queryPhotos(query).map { it.toDomainPhoto() }
 }

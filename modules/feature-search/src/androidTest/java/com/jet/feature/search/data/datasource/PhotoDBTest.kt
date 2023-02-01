@@ -53,24 +53,24 @@ class PhotoDBTest {
     }
 
     @Test
-    fun test_queryPhotos_with_valid_query_fruits() = runTest {
+    fun test_queryPhotos_with_matched_query() = runTest {
         assertThat(photos.size == photoDao.queryPhotos("fruits").size).isTrue
     }
 
     @Test
-    fun test_queryPhotos_with_invalid_query_fruits() = runTest {
+    fun test_queryPhotos_with_unmatched_query() = runTest {
         assertThat(photoDao.queryPhotos("av")).isEmpty()
     }
 
     @Test
-    fun test_getPhotoById_with_valid_id(): Unit = runTest {
+    fun test_getPhotoById_with_matched_id(): Unit = runTest {
         photoDao.getPhoto("fruits_2310212").take(1).collect {
             assertThat(it).isNotNull
         }
     }
 
     @Test
-    fun test_getPhotoById_with_invalid_id(): Unit = runTest {
+    fun test_getPhotoById_with_unmatched_id(): Unit = runTest {
         photoDao.getPhoto("av_2310212").take(1).collect {
             assertThat(it).isNull()
         }
