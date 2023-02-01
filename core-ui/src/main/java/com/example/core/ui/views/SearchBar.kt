@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.example.core.ui.R
 import com.example.core.ui.theme.JetTheme
 
+private const val MAXIMUM_CHARACTER = 100
+
 @Composable
 fun SearchBar(
     value: String,
@@ -47,10 +49,17 @@ fun SearchBar(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.padding(start = JetTheme.spacing.spacing12)
         ) {
+            var text = value
             Box(Modifier.weight(1f)) {
                 BasicTextField(
-                    value = value,
-                    onValueChange = { onValueChange(it) },
+                    singleLine = true,
+                    value = text,
+                    onValueChange = {
+                        if (it.length <= MAXIMUM_CHARACTER) {
+                            text = it
+                            onValueChange(it)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(stringResource(id = R.string.search_title))

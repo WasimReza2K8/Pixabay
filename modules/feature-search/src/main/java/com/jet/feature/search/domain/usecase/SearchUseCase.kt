@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import javax.inject.Inject
 
 @ViewModelScoped
@@ -41,7 +40,6 @@ class SearchUseCase @Inject constructor(
             getOutput(photos)
         }.catch { error ->
             if (error.isNetworkException()) {
-                Timber.e("network error called: $error")
                 emit(NetworkError)
             } else {
                 emit(UnknownError)
@@ -50,5 +48,5 @@ class SearchUseCase @Inject constructor(
 
     private fun getOutput(photos: List<Photo>): Output<List<Photo>> = Output.Success(photos)
 
-    private fun processQueryString(query: String): String = query.replace("\\s+".toRegex(), "+")
+    private fun processQueryString(query: String): String = query.trim().replace("\\s+".toRegex(), "+")
 }

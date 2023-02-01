@@ -116,10 +116,22 @@ class SearchUseCaseTest {
         }
 
     @Test
-    fun `Given query string with a whitespace, When invoked, Then called repository having query with a + sign`() =
+    fun `Given query string with a inside whitespace, When invoked, Then called repository having query with a + sign`() =
         runTest {
             val given = "test query"
             val expected = "test+query"
+
+            useCase.invoke(given).test {
+                verify { repository.searchPhoto(expected) }
+                awaitComplete()
+            }
+        }
+
+    @Test
+    fun `Given query string with outside whitespace, When invoked, Then called repository having query with a + sign`() =
+        runTest {
+            val given = " test "
+            val expected = "test"
 
             useCase.invoke(given).test {
                 verify { repository.searchPhoto(expected) }
