@@ -49,13 +49,13 @@ The following tools and technologies are used to implement the solution:
 
 ## Screen shot
 <p float="left">
-<img src="images/portrait-1.jpg" width="200">
-<img src="images/portrait-2.jpg" width="200">
-<img src="images/portrait-3.jpg" width="200">
+<img src="images/portrait-1.jpeg" width="200">
+<img src="images/portrait-2.jpeg" width="200">
+<img src="images/portrait-3.jpeg" width="200">
 </p>
 
 <p float="left">
-<img src="images/land-1.jpg" width="200">
-<img src="images/land-2.jpg" width="200">
-<img src="images/land-3.jpg" width="200">
+<img src="images/land-1.jpeg" width="200">
+<img src="images/land-2.jpeg" width="200">
+<img src="images/land-3.jpeg" width="200">
 </p>
