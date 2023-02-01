@@ -56,6 +56,6 @@ The following tools and technologies are used to implement the solution:
 
 <p float="left">
 <img src="images/land-1.jpeg" width="200">
-<img src="images/land-2.jpeg" width="200">
-<img src="images/land-3.jpeg" width="200">
+<img src="images/land2.jpeg" width="200">
+<img src="images/land3.jpeg" width="200">
 </p>
