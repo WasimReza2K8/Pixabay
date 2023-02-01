@@ -45,7 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.theme.JetTheme
-import com.example.core.ui.views.HandleError
+import com.example.core.ui.views.ErrorSnakeBar
 import com.example.core.ui.views.PhotoWithInfoView
 import com.jet.feature.detail.R
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event
@@ -70,7 +70,7 @@ private fun DetailScreenImpl(
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
-    HandleError(
+    ErrorSnakeBar(
         errorEvent = state.errorEvent,
         snackBarHostState = snackBarHostState,
         sendEvent = sendEvent,

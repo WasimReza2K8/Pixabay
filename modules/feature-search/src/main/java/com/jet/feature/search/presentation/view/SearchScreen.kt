@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.theme.JetTheme
-import com.example.core.ui.views.HandleError
+import com.example.core.ui.views.ErrorSnakeBar
 import com.example.core.ui.views.SearchBar
 import com.jet.feature.search.R
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event
@@ -48,7 +48,7 @@ private fun SearchScreenImpl(
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
-    HandleError(
+    ErrorSnakeBar(
         errorEvent = state.errorEvent,
         snackBarHostState = snackBarHostState,
         sendEvent = sendEvent,

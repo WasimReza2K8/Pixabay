@@ -11,7 +11,7 @@ import com.example.core.ui.viewmodel.ErrorEvent.UnknownError
 import com.example.core.ui.viewmodel.ViewEvent
 
 @Composable
-fun <UiEvent : ViewEvent> HandleError(
+fun <UiEvent : ViewEvent> ErrorSnakeBar(
     errorEvent: ErrorEvent?,
     snackBarHostState: SnackbarHostState,
     sendEvent: (event: UiEvent) -> Unit,
