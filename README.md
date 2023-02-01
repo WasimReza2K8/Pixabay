@@ -59,3 +59,6 @@ The following tools and technologies are used to implement the solution:
 <img src="images/land-2.jpeg" width="200">
 <img src="images/land-3.jpeg" width="200">
 </p>
+
+Note: To run the integration test there is Build Variant called "UITest" which needs to be enable.
+UITest variant cannot run unit test. To run unit test "debug" needs to be used.  
