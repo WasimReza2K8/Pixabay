@@ -18,8 +18,17 @@ plugins {
     id 'com.android.library'
 }
 apply from: "$rootDir/buildsystem/common-dependencies.gradle"
+android {
+
+    packagingOptions {
+        resources {
+            pickFirsts += ['META-INF/LICENSE.md', 'META-INF/licenses/ASM', 'META-INF/INDEX.LIST', 'META-INF/LICENSE-notice.md']
+        }
+    }
+    namespace 'com.jet.detail'
+}
 
 dependencies {
-    implementation commonDependencies.jetbrains.coroutine
     implementation project(path: ':core-navigation')
+    implementation libs.bundles.coroutines
 }

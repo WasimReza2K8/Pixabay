@@ -8,6 +8,13 @@ apply from: "$rootDir/buildsystem/common-dependencies.gradle"
 apply from: "$rootDir/buildsystem/compose-dependencies.gradle"
 
 android {
+
+    packagingOptions {
+        resources {
+            pickFirsts += ['META-INF/LICENSE.md', 'META-INF/licenses/ASM', 'META-INF/INDEX.LIST', 'META-INF/LICENSE-notice.md']
+        }
+    }
+    namespace 'com.example.wasim'
     defaultConfig {
         testInstrumentationRunner "com.example.wasim.CustomTestRunner"
         vectorDrawables {
@@ -23,25 +30,20 @@ dependencies {
     implementation project(':modules:feature-search')
     implementation project(':core-ui')
     implementation project(':core-navigation')
-    def commonDependencies = rootProject.ext.commonDependencies
 
-    implementation commonDependencies.androidx.appcompat
+    implementation libs.androidx.appcompat
 
     // androidTest
-    debugImplementation commonDependencies.compose.uiTestManifest
-    androidTestImplementation commonDependencies.compose.uiTestCompose
+    debugImplementation libs.androidx.compose.ui.test.manifest
+    androidTestImplementation libs.androidx.compose.ui.test.junit4
 
-    def commonAndroidTestDependencies = rootProject.ext.commonAndroidTestDependencies
-    def commonTestDependencies = rootProject.ext.commonTestDependencies
-    androidTestImplementation commonAndroidTestDependencies.espressoCore
-    androidTestImplementation commonAndroidTestDependencies.espressoContrib
-    androidTestImplementation commonAndroidTestDependencies.espressoIntent
-    androidTestImplementation commonAndroidTestDependencies.testRunner
-    androidTestImplementation commonAndroidTestDependencies.androidxTestExtJunit
-    androidTestImplementation commonAndroidTestDependencies.androidxTestExtJunitKtx
-    androidTestImplementation commonAndroidTestDependencies.hiltTest
-    kaptAndroidTest commonDependencies.google.hiltCompiler
-    androidTestImplementation commonTestDependencies.coroutineTest
-    androidTestImplementation commonDependencies.androidx.navigationFragment
-    debugImplementation commonAndroidTestDependencies.fragmentTest
+    androidTestImplementation libs.androidx.test.espresso.core
+    androidTestImplementation libs.androidx.test.espresso.contrib
+    androidTestImplementation libs.androidx.test.espresso.intents
+    androidTestImplementation libs.androidx.test.runner
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation  libs.androidx.test.ext.junit.ktx
+    androidTestImplementation libs.hilt.android.testing
+    kaptAndroidTest libs.hilt.compiler
+    androidTestImplementation libs.org.jetbrains.kotlinx.coroutines.test
 }

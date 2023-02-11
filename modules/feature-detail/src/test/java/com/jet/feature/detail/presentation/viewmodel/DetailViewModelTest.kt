@@ -21,7 +21,7 @@ import com.example.core.R
 import com.example.core.navigation.Navigator
 import com.example.core.resProvider.ResourceProvider
 import com.example.core.state.Output
-import com.example.core.ui.viewmodel.ErrorEvent.UnknownError
+import com.example.core.viewmodel.ErrorEvent.UnknownError
 import com.jet.feature.detail.domain.usecase.DetailUseCase
 import com.jet.feature.detail.presentation.launcher.DetailLauncherImpl
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnBackButtonClicked

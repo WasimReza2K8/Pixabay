@@ -16,5 +16,5 @@ interface PhotoDao {
     suspend fun queryPhotos(query: String): List<PhotoEntity>
 
     @Query("SELECT * FROM photo_table WHERE local_id = :id")
-    fun getPhoto(id: String): Flow<PhotoEntity>
+    fun getPhoto(id: String): Flow<PhotoEntity?>
 }

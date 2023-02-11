@@ -7,13 +7,16 @@ import com.jet.search.presentation.SearchLauncher
 import javax.inject.Inject
 
 class SearchLauncherImpl @Inject constructor() : SearchLauncher {
-    private val route = "search"
 
-    override fun route() = route
+    override fun route() = ROUTE
 
     override fun registerGraph(navGraphBuilder: NavGraphBuilder) {
-        navGraphBuilder.composable(route) {
+        navGraphBuilder.composable(ROUTE) {
             SearchScreen()
         }
+    }
+
+    companion object {
+        private const val ROUTE = "search"
     }
 }

@@ -23,8 +23,8 @@ import com.example.core.navigation.Navigator
 import com.example.core.resProvider.ResourceProvider
 import com.example.core.state.Output.Success
 import com.example.core.state.Output.UnknownError
-import com.example.core.ui.viewmodel.BaseViewModel
-import com.example.core.ui.viewmodel.ErrorEvent
+import com.example.core.viewmodel.BaseViewModel
+import com.example.core.viewmodel.ErrorEvent
 import com.jet.feature.detail.domain.usecase.DetailUseCase
 import com.jet.feature.detail.presentation.launcher.DetailLauncherImpl.Companion.LOCAL_ID
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event

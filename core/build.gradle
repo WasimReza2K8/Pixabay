@@ -5,6 +5,13 @@ plugins {
 apply from: "$rootDir/buildsystem/common-dependencies.gradle"
 
 android {
+
+    packagingOptions {
+        resources {
+            pickFirsts += ['META-INF/LICENSE.md', 'META-INF/licenses/ASM', 'META-INF/INDEX.LIST', 'META-INF/LICENSE-notice.md']
+        }
+    }
+    namespace 'com.example.core'
     buildTypes {
         Properties properties = new Properties()
         if (file("../local.properties").exists()) {
@@ -26,21 +33,20 @@ android {
 }
 
 dependencies {
-    def commonDependencies = rootProject.ext.commonDependencies
-    implementation commonDependencies.androidx.appcompat
-    //navigation
-    implementation commonDependencies.androidx.navigationFragment
-    implementation commonDependencies.androidx.navigationKtx
-    implementation commonDependencies.google.material
-    implementation commonDependencies.jetbrains.coroutine
-    implementation commonDependencies.other.adapterDelegates
-    implementation commonDependencies.jetbrains.kotlinSerialization
-    implementation commonDependencies.other.retrofitKotlinSerializationConverter
-    implementation commonDependencies.other.retrofit2
-    implementation commonDependencies.other.okHttp
-    implementation commonDependencies.other.okHttpInterceptor
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+
+    implementation libs.com.google.android.material
+    implementation libs.bundles.coroutines
+    implementation libs.kotlinx.serialization
+    implementation libs.retrofit.kotlinx.serialization.converter
+    implementation libs.com.squareup.retrofit
+    implementation libs.com.squareup.okhttp3.okhttp
+    implementation libs.com.squareup.okhttp3.logging.interceptor
+    implementation libs.glide
+    annotationProcessor libs.glide.compiler
     // devtool
-    def developmentDependencies = rootProject.ext.developmentDependencies
-    debugImplementation developmentDependencies.chucker
-    releaseImplementation developmentDependencies.chuckNoOp
+    debugImplementation libs.chucker
+    releaseImplementation libs.chucker.no.op
 }

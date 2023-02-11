@@ -8,22 +8,26 @@ apply from: "$rootDir/buildsystem/compose-dependencies.gradle"
 
 
 android {
+
+    packagingOptions {
+        resources {
+            pickFirsts += ['META-INF/LICENSE.md', 'META-INF/licenses/ASM', 'META-INF/INDEX.LIST', 'META-INF/LICENSE-notice.md']
+        }
+    }
     resourcePrefix 'search_'
+    namespace 'com.jet.feature.search'
     defaultConfig {
         consumerProguardFiles "$projectDir/proguard-search-consumer-rules.pro"
     }
 
     buildTypes {
         debug {
-            debuggable true
             buildConfigField "long", "DEBOUNCE_TIME", "350L"
         }
         release {
-            debuggable false
             buildConfigField "long", "DEBOUNCE_TIME", "350L"
         }
         UITest {
-            debuggable true
             buildConfigField "long", "DEBOUNCE_TIME", "0L"
         }
     }
@@ -37,24 +41,26 @@ dependencies {
     implementation project(':modules:feature-search-shared')
     implementation project(':modules:feature-detail-shared')
 
-    implementation commonDependencies.other.retrofit2
-    implementation commonDependencies.jetbrains.kotlinSerialization
-    implementation commonDependencies.jetbrains.coroutine
-    implementation commonDependencies.androidx.room
-    ksp commonDependencies.androidx.roomCompiler
-    implementation commonDependencies.androidx.roomKtx
-    androidTestImplementation commonTestDependencies.roomTest
-    androidTestImplementation commonTestDependencies.extJunit
-    androidTestImplementation commonTestDependencies.coroutineTest
-    androidTestImplementation commonTestDependencies.testRule
-    androidTestImplementation commonTestDependencies.testRunner
-    androidTestImplementation commonAndroidTestDependencies.androidxTestExtJunitKtx
-    androidTestImplementation commonTestDependencies.assertj
+    implementation libs.kotlinx.serialization
+    implementation libs.com.squareup.retrofit
+    implementation libs.bundles.coroutines
+    implementation libs.androidx.room.runtime
+    ksp libs.androidx.room.compiler
+    implementation libs.androidx.room.ktx
+    androidTestImplementation libs.androidx.room.testing
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.org.jetbrains.kotlinx.coroutines.test
+    androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.androidx.test.runner
+    androidTestImplementation libs.androidx.test.ext.junit.ktx
+    androidTestImplementation libs.org.assertj.core
 }
 
-gradle.taskGraph.useFilter { task ->
-    if (task.name.startsWith("test") && task.name.contains("testUITestUnitTest")) {
-        return false
+gradle.taskGraph.whenReady { taskGraph ->
+    def tasks = taskGraph.getAllTasks()
+    if (tasks.find {it.name.startsWith("test")}) {
+        tasks.findAll {it.name.contains("testUITestUnitTest")}.each { task ->
+            task.enabled = false
+        }
     }
-    return true
 }

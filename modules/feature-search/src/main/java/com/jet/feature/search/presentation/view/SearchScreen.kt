@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.core.ui.theme.JetTheme
+import com.example.core.ui.theme.WasimTheme
 import com.example.core.ui.views.ErrorSnakeBar
 import com.example.core.ui.views.SearchBar
 import com.jet.feature.search.R
@@ -58,7 +58,7 @@ private fun SearchScreenImpl(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState),
         topBar = {
             SearchBar(
-                hint = "Search",
+                hint = stringResource(id = R.string.search),
                 value = state.query,
                 onValueChange = { query ->
                     sendEvent(OnSearch(query))
@@ -71,9 +71,9 @@ private fun SearchScreenImpl(
             Modifier
                 .fillMaxSize()
                 .padding(
-                    start = JetTheme.spacing.spacing16,
+                    start = WasimTheme.spacing.spacing16,
                     top = scaffoldPadding.calculateTopPadding(),
-                    end = JetTheme.spacing.spacing16,
+                    end = WasimTheme.spacing.spacing16,
                     bottom = scaffoldPadding.calculateBottomPadding(),
                 )
         ) {
@@ -89,16 +89,16 @@ private fun SearchScreenImpl(
             } else {
                 PhotoList(
                     photos = state.photos,
-                    onItemClick = { localId ->
-                        sendEvent(OnPhotoClicked(localId))
-                    }
+                    onItemClick = { localId -> sendEvent(OnPhotoClicked(localId)) }
                 )
             }
         }
 
         if (state.isLoading) {
             CircularProgressIndicator(
-                modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.Center),
             )
         }
 

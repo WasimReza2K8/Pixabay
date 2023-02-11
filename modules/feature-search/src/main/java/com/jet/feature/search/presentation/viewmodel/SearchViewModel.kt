@@ -23,8 +23,8 @@ import com.example.core.state.Output.NetworkError
 import com.example.core.state.Output.Success
 import com.example.core.state.Output.UnknownError
 import com.example.core.ui.R.string
-import com.example.core.ui.viewmodel.BaseViewModel
-import com.example.core.ui.viewmodel.ErrorEvent
+import com.example.core.viewmodel.BaseViewModel
+import com.example.core.viewmodel.ErrorEvent
 import com.jet.detail.presentation.DetailLauncher
 import com.jet.feature.search.BuildConfig.DEBOUNCE_TIME
 import com.jet.feature.search.domain.usecase.SearchUseCase

@@ -44,7 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.core.ui.theme.JetTheme
+import com.example.core.ui.theme.WasimTheme
 import com.example.core.ui.views.ErrorSnakeBar
 import com.example.core.ui.views.PhotoWithInfoView
 import com.jet.feature.detail.R
@@ -84,8 +84,7 @@ private fun DetailScreenImpl(
                 .padding(scaffoldPadding)
                 .testTag(stringResource(id = R.string.detail_title))
         ) {
-            IconButton(onClick = { sendEvent(OnBackButtonClicked) }
-            ) {
+            IconButton(onClick = { sendEvent(OnBackButtonClicked) }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "",
@@ -129,7 +128,7 @@ private fun PhotoActivityItem(
 ) {
     Row(modifier = modifier
         .wrapContentSize()
-        .padding(horizontal = JetTheme.spacing.spacing4)
+        .padding(horizontal = WasimTheme.spacing.spacing4)
 
     ) {
         Image(painter = painter, contentDescription = "image_activity")

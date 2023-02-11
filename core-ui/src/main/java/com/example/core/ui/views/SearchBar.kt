@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.R
-import com.example.core.ui.theme.JetTheme
+import com.example.core.ui.theme.WasimTheme
 
 private const val MAXIMUM_CHARACTER = 100
 
@@ -36,18 +36,18 @@ fun SearchBar(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        shape = JetTheme.shape.roundCorner16,
+        shape = WasimTheme.shape.roundCorner16,
         modifier = modifier
             .padding(10.dp)
             .fillMaxWidth()
             .height(50.dp),
-        elevation = JetTheme.elevation.elevation8,
+        elevation = WasimTheme.elevation.elevation8,
         backgroundColor = Color.White
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
-            modifier = Modifier.padding(start = JetTheme.spacing.spacing12)
+            modifier = Modifier.padding(start = WasimTheme.spacing.spacing12)
         ) {
             var text = value
             Box(Modifier.weight(1f)) {
@@ -74,7 +74,7 @@ fun SearchBar(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
                     Modifier
-                        .clip(JetTheme.shape.roundCorner50)
+                        .clip(WasimTheme.shape.roundCorner50)
                         .clickable { onClick() }
                         .padding(5.dp)
                         .testTag(stringResource(id = R.string.search_clear))
@@ -87,7 +87,7 @@ fun SearchBar(
 @Preview
 @Composable
 private fun SearchBarDemo() {
-    JetTheme {
+    WasimTheme {
         SearchBar(
             value = "",
             onClick = {},

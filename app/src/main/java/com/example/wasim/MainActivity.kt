@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.core.navigation.Navigator
 import com.example.core.navigation.NavigatorEvent
-import com.example.core.ui.theme.JetTheme
+import com.example.core.ui.theme.WasimTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            JetTheme {
+            WasimTheme {
                 AppContent(
                     rememberNavController(),
                     navigator,
@@ -47,7 +47,7 @@ fun AppContent(
     navigator: Navigator,
     featureProvider: FeatureProvider,
 ) {
-    JetTheme {
+    WasimTheme {
         val keyboardController = LocalSoftwareKeyboardController.current
         LaunchedEffect(navHostController) {
             navigator.destinations.onEach { event ->

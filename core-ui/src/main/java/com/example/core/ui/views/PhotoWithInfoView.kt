@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.ui.R
-import com.example.core.ui.theme.JetTheme
+import com.example.core.ui.theme.WasimTheme
 
 @Composable
 fun PhotoWithInfoView(
@@ -40,19 +40,19 @@ fun PhotoWithInfoView(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomStart)
-                .background(color = JetTheme.color.background)
+                .background(color = WasimTheme.color.background)
         ) {
             Text(
                 text = userName,
-                style = JetTheme.typography.body2,
-                color = JetTheme.color.grey200,
-                modifier = Modifier.padding(horizontal = JetTheme.spacing.spacing4),
+                style = WasimTheme.typography.body2,
+                color = WasimTheme.color.grey200,
+                modifier = Modifier.padding(horizontal = WasimTheme.spacing.spacing4),
             )
             Text(
                 text = tags,
-                style = JetTheme.typography.caption,
-                color = JetTheme.color.teal200,
-                modifier = Modifier.padding(horizontal = JetTheme.spacing.spacing4),
+                style = WasimTheme.typography.caption,
+                color = WasimTheme.color.teal200,
+                modifier = Modifier.padding(horizontal = WasimTheme.spacing.spacing4),
             )
             content()
         }
@@ -62,7 +62,7 @@ fun PhotoWithInfoView(
 @Preview
 @Composable
 private fun ImageTextPreview() {
-    JetTheme {
+    WasimTheme {
         Column(modifier = Modifier.fillMaxSize()) {
             PhotoWithInfoView(
                 userName = "userName",
@@ -73,8 +73,8 @@ private fun ImageTextPreview() {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = "inner Text",
-                        style = JetTheme.typography.caption,
-                        color = JetTheme.color.teal200
+                        style = WasimTheme.typography.caption,
+                        color = WasimTheme.color.teal200
                     )
                 }
             }

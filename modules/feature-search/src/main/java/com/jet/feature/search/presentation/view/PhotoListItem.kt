@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.ui.theme.JetTheme
+import com.example.core.ui.theme.WasimTheme
 import com.example.core.ui.views.PhotoWithInfoView
 import com.jet.feature.search.R
 import com.jet.search.presentation.model.PhotoUiModel
@@ -26,7 +26,7 @@ fun PhotoListItem(
     Card(modifier = modifier
         .fillMaxWidth()
         .height(200.dp)
-        .padding(JetTheme.spacing.spacing8)
+        .padding(WasimTheme.spacing.spacing8)
         .clickable {
             onClick(photo.localId)
         }

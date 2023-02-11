@@ -8,7 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.White
 
 private val color = Color()
 
@@ -22,18 +23,18 @@ private val LightColorPalette = lightColors(
     primary = color.blue500,
     primaryVariant = color.blue700,
     secondary = color.teal200,
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
+    background = White,
+    surface = White,
+    onPrimary = White,
+    onSecondary = Black,
+    onBackground = Black,
+    onSurface = Black,
 )
 
 private val LocalSpacings = compositionLocalOf<Spacing> {
     error("No spacings provided! Make sure to wrap all components in an JetTheme.")
 }
-private val LocalColors = compositionLocalOf<com.example.core.ui.theme.Color> {
+private val LocalColors = compositionLocalOf<Color> {
     error("No colors provided! Make sure to wrap all components in an JetTheme.")
 }
 
@@ -50,7 +51,7 @@ private val LocalShapes = compositionLocalOf<Shape> {
 }
 
 @Composable
-fun JetTheme(
+fun WasimTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
@@ -73,8 +74,8 @@ fun JetTheme(
     }
 }
 
-object JetTheme {
-    val color: com.example.core.ui.theme.Color
+object WasimTheme {
+    val color: Color
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current

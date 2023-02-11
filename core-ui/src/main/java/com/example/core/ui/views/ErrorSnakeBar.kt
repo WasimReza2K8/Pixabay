@@ -5,10 +5,10 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult.Dismissed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.example.core.ui.viewmodel.ErrorEvent
-import com.example.core.ui.viewmodel.ErrorEvent.NetworkError
-import com.example.core.ui.viewmodel.ErrorEvent.UnknownError
-import com.example.core.ui.viewmodel.ViewEvent
+import com.example.core.viewmodel.ErrorEvent
+import com.example.core.viewmodel.ErrorEvent.NetworkError
+import com.example.core.viewmodel.ErrorEvent.UnknownError
+import com.example.core.viewmodel.ViewEvent
 
 @Composable
 fun <UiEvent : ViewEvent> ErrorSnakeBar(

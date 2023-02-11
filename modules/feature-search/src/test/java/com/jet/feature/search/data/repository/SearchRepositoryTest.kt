@@ -115,6 +115,19 @@ class SearchRepositoryTest {
         }
 
     @Test
+    fun `Given db contains query no result, When getPhotoById called, Then returns valid photo`() =
+        runTest {
+            coEvery {
+                dao.getPhoto(any())
+            } returns flow { emit(null) }
+
+            repository.getPhotoById("test").test {
+                assertThat(null == awaitItem()).isTrue
+                awaitComplete()
+            }
+        }
+
+    @Test
     fun `Given db provide exception, When getPhotoById called, Then throws the exception`() =
         runTest {
             val given = RuntimeException()

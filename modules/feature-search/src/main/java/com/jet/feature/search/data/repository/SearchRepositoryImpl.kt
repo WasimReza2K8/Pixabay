@@ -42,7 +42,7 @@ class SearchRepositoryImpl @Inject constructor(
 
     override fun getPhotoById(id: String): Flow<Photo?> =
         photoDao.getPhoto(id).map {
-            it.toDomainPhoto()
+            it?.toDomainPhoto()
         }
 
     private suspend fun getLocalPhotos(query: String): List<Photo> =

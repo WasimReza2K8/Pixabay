@@ -16,9 +16,9 @@
 
 package com.jet.feature.search.presentation.viewmodel
 
-import com.example.core.ui.viewmodel.ErrorEvent
-import com.example.core.ui.viewmodel.ViewEvent
-import com.example.core.ui.viewmodel.ViewState
+import com.example.core.viewmodel.ErrorEvent
+import com.example.core.viewmodel.ViewEvent
+import com.example.core.viewmodel.ViewState
 import com.jet.search.presentation.model.PhotoUiModel
 
 object SearchContract {

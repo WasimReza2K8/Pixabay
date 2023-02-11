@@ -10,26 +10,9 @@ android {
 }
 
 dependencies {
-    def commonDependencies = rootProject.ext.commonDependencies
-    def composeBom = platform(commonDependencies.compose.composeBom)
+    def composeBom = platform(libs.androidx.compose.bom)
     implementation composeBom
     androidTestImplementation composeBom
-
-    implementation commonDependencies.compose.ui
-    debugImplementation commonDependencies.compose.uiTooling
-    implementation commonDependencies.compose.foundation
-    implementation commonDependencies.compose.materialDesign
-    implementation commonDependencies.compose.meterialIcon
-    implementation commonDependencies.compose.iconExt
-    implementation commonDependencies.compose.preview
-    implementation commonDependencies.compose.activity
-    implementation commonDependencies.compose.viewModel
-    implementation commonDependencies.compose.animation
-    implementation commonDependencies.compose.flowLayout
-    implementation commonDependencies.compose.composeRuntime
-    implementation commonDependencies.compose.lifecycleRuntimeCompose
-    debugImplementation commonDependencies.compose.uiTestManifest
-    debugImplementation commonDependencies.compose.customView
-    implementation commonDependencies.compose.composeNavigation
-    implementation commonDependencies.compose.hiltNavigationCompose
+    implementation(libs.bundles.compose)
+    implementation(libs.androidx.lifecycle.compose)
 }

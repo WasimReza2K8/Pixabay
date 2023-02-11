@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import com.example.core.ui.theme.JetTheme
+import com.example.core.ui.theme.WasimTheme
 import com.jet.feature.search.R.string
 import com.jet.search.presentation.model.PhotoUiModel
 
@@ -54,10 +54,10 @@ private fun getPadding(): Dp {
 
     return when (orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
-            JetTheme.spacing.spacing80
+            WasimTheme.spacing.spacing80
         }
         else -> {
-            JetTheme.spacing.spacing0
+            WasimTheme.spacing.spacing0
         }
     }
 }

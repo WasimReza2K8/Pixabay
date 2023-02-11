@@ -21,7 +21,7 @@ import com.example.core.state.Output
 import com.example.core.state.Output.NetworkError
 import com.example.core.state.Output.UnknownError
 import com.example.core.ui.R.string
-import com.example.core.ui.viewmodel.ErrorEvent
+import com.example.core.viewmodel.ErrorEvent
 import com.jet.detail.presentation.DetailLauncher
 import com.jet.feature.search.domain.usecase.SearchUseCase
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed

@@ -1,13 +1,19 @@
 plugins {
     id 'com.android.library'
-    id 'kotlinx-serialization'
 }
 apply from: "$rootDir/buildsystem/common-dependencies.gradle"
 apply from: "$rootDir/buildsystem/compose-dependencies.gradle"
 
 
 android {
+
+    packagingOptions {
+        resources {
+            pickFirsts += ['META-INF/LICENSE.md', 'META-INF/licenses/ASM', 'META-INF/INDEX.LIST', 'META-INF/LICENSE-notice.md']
+        }
+    }
     resourcePrefix 'detail_'
+    namespace 'com.jet.feature.detail'
     defaultConfig {
         consumerProguardFiles "$projectDir/proguard-detail-consumer-rules.pro"
     }
@@ -20,7 +26,5 @@ dependencies {
     implementation project(':modules:feature-detail-shared')
     implementation project(':modules:feature-search-shared')
 
-    def commonDependencies = rootProject.ext.commonDependencies
-    implementation commonDependencies.jetbrains.coroutine
-    implementation commonDependencies.jetbrains.kotlinSerialization
+    implementation libs.bundles.coroutines
 }
