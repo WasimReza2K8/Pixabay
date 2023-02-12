@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.example.core.ui.theme.WasimTheme
-import com.jet.feature.search.R.string
+import com.wasim.feature.search.R.string
 import com.jet.search.presentation.model.PhotoUiModel
 
 @Composable

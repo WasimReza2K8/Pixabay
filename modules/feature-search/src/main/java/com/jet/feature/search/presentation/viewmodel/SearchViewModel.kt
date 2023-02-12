@@ -26,7 +26,7 @@ import com.example.core.ui.R.string
 import com.example.core.viewmodel.BaseViewModel
 import com.example.core.viewmodel.ErrorEvent
 import com.jet.detail.presentation.DetailLauncher
-import com.jet.feature.search.BuildConfig.DEBOUNCE_TIME
+import com.wasim.feature.search.BuildConfig.DEBOUNCE_TIME
 import com.jet.feature.search.domain.usecase.SearchUseCase
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed

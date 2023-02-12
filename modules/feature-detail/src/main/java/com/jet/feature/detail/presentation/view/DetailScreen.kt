@@ -47,12 +47,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.theme.WasimTheme
 import com.example.core.ui.views.ErrorSnakeBar
 import com.example.core.ui.views.PhotoWithInfoView
-import com.jet.feature.detail.R
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnBackButtonClicked
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnErrorSnakeBarDismissed
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.State
 import com.jet.feature.detail.presentation.viewmodel.DetailViewModel
+import com.wasim.feature.detail.R
 
 @Composable
 fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {

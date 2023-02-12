@@ -21,7 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.theme.WasimTheme
 import com.example.core.ui.views.ErrorSnakeBar
 import com.example.core.ui.views.SearchBar
-import com.jet.feature.search.R
+import com.wasim.feature.search.R
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed
 import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnPhotoClicked

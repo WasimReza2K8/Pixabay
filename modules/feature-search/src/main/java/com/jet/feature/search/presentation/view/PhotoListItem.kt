@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.ui.theme.WasimTheme
 import com.example.core.ui.views.PhotoWithInfoView
-import com.jet.feature.search.R
+import com.wasim.feature.search.R
 import com.jet.search.presentation.model.PhotoUiModel
 
 @Composable
