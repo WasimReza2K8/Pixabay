@@ -15,7 +15,7 @@ android {
         }
     }
     resourcePrefix 'search_'
-    namespace 'com.jet.feature.search'
+    namespace 'com.wasim.feature.search'
     defaultConfig {
         consumerProguardFiles "$projectDir/proguard-search-consumer-rules.pro"
     }
@@ -42,8 +42,8 @@ dependencies {
     implementation project(':modules:feature-detail-shared')
 
     implementation libs.kotlinx.serialization
-    implementation libs.com.squareup.retrofit
     implementation libs.bundles.coroutines
+    implementation libs.com.squareup.retrofit
     implementation libs.androidx.room.runtime
     ksp libs.androidx.room.compiler
     implementation libs.androidx.room.ktx

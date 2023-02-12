@@ -1,0 +1,21 @@
+package com.wasim.feature.@placeholderlowercase@.presentation.launcher
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import com.wasim.feature.@placeholderlowercase@.presentation.view.@PlaceholderName@Screen
+import com.wasim.@placeholderlowercase@.presentation.@PlaceholderName@Launcher
+import javax.inject.Inject
+
+
+class @PlaceholderName@LauncherImpl @Inject constructor() : @PlaceholderName@Launcher {
+       private val route = "@placeholderlowercase@"
+
+       override fun route() = route
+
+       override fun registerGraph(navGraphBuilder: NavGraphBuilder) {
+           navGraphBuilder.composable(route) {
+               @PlaceholderName@Screen()
+           }
+       }
+
+}

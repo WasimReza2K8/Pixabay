@@ -13,10 +13,6 @@ buildscript {
         classpath (libs.hilt.plugin)
         classpath (libs.kotlinx.serialization.plugin)
         classpath (libs.org.jetbrains.kotlin.gradle.plugin)
-       /* def buildDependencies = rootProject.buildDependencies
-        classpath buildDependencies.hiltGradlePlugin
-        classpath buildDependencies.serialization
-        classpath buildDependencies.kotlinGradlePlugin*/
     }
 }
 

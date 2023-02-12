@@ -13,7 +13,7 @@ android {
         }
     }
     resourcePrefix 'detail_'
-    namespace 'com.jet.feature.detail'
+    namespace 'com.wasim.feature.detail'
     defaultConfig {
         consumerProguardFiles "$projectDir/proguard-detail-consumer-rules.pro"
     }
