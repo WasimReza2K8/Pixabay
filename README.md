@@ -7,7 +7,7 @@ The above dependency graph is showing which module are depending on which module
 module. Any feature module can depend on feature-shared modules and core modules. The feature-shared module can depend on
 core modules. App module can depend on every other modules. The modularization is done depending on vertical slicing approach. 
 For more information please check [this article](https://jeroenmols.com/blog/2019/03/18/modularizationarchitecture/).
-This type of modularization makes the features loosely coupled, ensure high cohesion, no unintended behavior sharing and it is build time 
+This type of modularization makes the features loosely coupled, ensure high cohesion, no unintended behaviour sharing and it is build time 
 friendly.
 
 ## Architecture
@@ -62,3 +62,9 @@ The following tools and technologies are used to implement the solution:
 
 Note: To run the integration test there is Build Variant called "UITest" which needs to be enable.
 UITest variant cannot run unit test. To run unit test "debug" needs to be used.  
+
+<p float="left">
+<img src="https://user-images.githubusercontent.com/26042899/219120572-9d95ea96-4cf6-4e60-a234-952e7a20e24b.jpg" width="200">
+<img src="images/land-2.jpeg" width="200">
+<img src="images/land-3.jpeg" width="200">
+</p>

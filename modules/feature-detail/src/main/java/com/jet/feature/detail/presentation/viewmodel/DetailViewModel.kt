@@ -63,7 +63,7 @@ class DetailViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            useCase.invoke(id).collect { output ->
+            useCase(id).collect { output ->
                 when (output) {
                     is Success -> updateState {
                         copy(

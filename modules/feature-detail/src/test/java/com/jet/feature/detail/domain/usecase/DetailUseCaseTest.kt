@@ -58,7 +58,7 @@ class DetailUseCaseTest {
     fun `Given valid localId with null response, When invoked, Then returns output containing null`() =
         runTest {
             // Given
-            val expected = Success(null)
+            val expected = UnknownError
             val id = "localId"
             mockRepository(null)
 

@@ -361,11 +361,6 @@ apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
 
 [bundles]
 camerax = ["androidx-camera-core", "androidx-camera-camera2", "androidx-camera-lifecycle", "androidx-camera-video", "androidx-camera-view", "androidx-camera-extensions"]
-# Adding androidx-customlayout-poolingcontainer is a workaround needed for Compose Previews
-# to work with Compose Tooling 1.2.0
-# https://stackoverflow.com/a/72807850
-# https://android.googlesource.com/platform/frameworks/support/+/96f50779ed5822528f976074db6cd72975ea037a
 compose = ["androidx-compose-foundation", "androidx-compose-material", "androidx-compose-runtime-rxjava2", "androidx-compose-ui", "androidx-compose-ui-tooling", "androidx-customlayout-poolingcontainer", "hilt-navigation-compose"]
 compose-testing = ["androidx-compose-ui-test-junit4"]
 coroutines = ["org-jetbrains-kotlinx-coroutines-core", "org-jetbrains-kotlinx-coroutines-android"]
-rxjava2 = ["io-reactivex-rxjava2-rxandroid", "io-reactivex-rxjava2-rxkotlin"]

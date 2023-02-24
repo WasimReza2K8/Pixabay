@@ -17,6 +17,7 @@
 package com.jet.feature.detail.domain.usecase
 
 import com.example.core.dispatcher.BaseDispatcherProvider
+import com.example.core.exception.Exceptions.PhotoDetailNotFoundException
 import com.example.core.state.Output
 import com.jet.search.domain.model.Photo
 import com.jet.search.domain.repository.SearchRepository
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 @ViewModelScoped
@@ -32,12 +34,17 @@ class DetailUseCase @Inject constructor(
     private val repository: SearchRepository,
     private val dispatcherProvider: BaseDispatcherProvider,
 ) {
-    fun invoke(id: String): Flow<Output<Photo?>> =
+    operator fun invoke(id: String): Flow<Output<Photo?>> =
         repository.getPhotoById(id).map {
             getOutput(it)
         }.catch {
+            if (it is PhotoDetailNotFoundException) {
+                Timber.e(it)
+            }
             emit(Output.UnknownError)
         }.flowOn(dispatcherProvider.io())
 
-    private fun getOutput(photo: Photo?): Output<Photo?> = Output.Success(photo)
+    private fun getOutput(photo: Photo?): Output<Photo> = photo?.let {
+        Output.Success(it)
+    } ?: throw PhotoDetailNotFoundException
 }
