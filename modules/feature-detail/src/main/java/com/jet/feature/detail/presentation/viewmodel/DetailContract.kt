@@ -16,6 +16,7 @@
 
 package com.jet.feature.detail.presentation.viewmodel
 
+import com.example.core.state.Event
 import com.example.core.viewmodel.ErrorEvent
 import com.example.core.viewmodel.ViewEvent
 import com.example.core.viewmodel.ViewState
@@ -24,12 +25,11 @@ import com.jet.search.presentation.model.PhotoUiModel
 object DetailContract {
     data class State(
         val photo: PhotoUiModel? = null,
-        val errorEvent: ErrorEvent? = null,
+        val errorUiEvent: Event<ErrorEvent>? = null,
     ) : ViewState
 
-    sealed interface Event : ViewEvent {
-        data class OnViewModelInit(val id: String) : Event
-        object OnBackButtonClicked : Event
-        object OnErrorSnakeBarDismissed : Event
+    sealed interface UiEvent : ViewEvent {
+        data class OnViewModelInit(val id: String) : UiEvent
+        object OnBackButtonClicked : UiEvent
     }
 }

@@ -24,8 +24,7 @@ import com.example.core.state.Output
 import com.example.core.viewmodel.ErrorEvent.UnknownError
 import com.jet.feature.detail.domain.usecase.DetailUseCase
 import com.jet.feature.detail.presentation.launcher.DetailLauncherImpl
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnBackButtonClicked
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnErrorSnakeBarDismissed
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent.OnBackButtonClicked
 import com.jet.feature.detail.utils.photo
 import com.jet.feature.detail.utils.photoUi
 import com.jet.search.domain.model.Photo
@@ -99,7 +98,7 @@ class DetailViewModelTest {
             createViewModel()
 
             viewModel.viewState.take(1).collectLatest {
-                assertThat((it.errorEvent as UnknownError).message == unknownError).isTrue
+                assertThat((it.errorUiEvent!!.getContentIfNotHandled() as UnknownError).message == unknownError).isTrue
             }
         }
 
@@ -112,18 +111,6 @@ class DetailViewModelTest {
 
         verify(exactly = 1) { navigator.navigateUp() }
     }
-
-    @Test
-    fun `When OnErrorSnakeBarDismissed is happened, Then in viewState errorEvent become null`() =
-        runTest {
-            mockSaveStateHandle("localId")
-            createViewModel()
-            viewModel.onUiEvent(OnErrorSnakeBarDismissed)
-            viewModel.viewState.take(1).collectLatest {
-                assertThat(it.errorEvent).isNull()
-            }
-
-        }
 
     @Test
     fun `Given id is empty, When init viewModel, Then DetailUseCase never called`() {

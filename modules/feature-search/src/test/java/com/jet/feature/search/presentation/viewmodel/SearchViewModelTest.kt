@@ -24,12 +24,11 @@ import com.example.core.ui.R.string
 import com.example.core.viewmodel.ErrorEvent
 import com.jet.detail.presentation.DetailLauncher
 import com.jet.feature.search.domain.usecase.SearchUseCase
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnPhotoClicked
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnQueryClearClicked
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSearch
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSelectConfirmed
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSelectDecline
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnPhotoClicked
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnQueryClearClicked
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSearch
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSelectConfirmed
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSelectDecline
 import com.jet.feature.search.utils.photo
 import com.jet.feature.search.utils.photoUi
 import com.jet.search.domain.model.Photo
@@ -222,7 +221,7 @@ class SearchViewModelTest {
             viewModel.onUiEvent(OnSearch("de"))
             advanceTimeBy(1000)
             viewModel.viewState.take(1).collectLatest {
-                assertThat(networkError == (it.errorEvent as ErrorEvent.NetworkError).message).isTrue
+                assertThat(networkError == (it.errorUiEvent?.getContentIfNotHandled() as ErrorEvent.NetworkError).message).isTrue
             }
         }
 
@@ -236,7 +235,7 @@ class SearchViewModelTest {
             advanceTimeBy(1000)
 
             viewModel.viewState.take(1).collectLatest {
-                assertThat(unknownError == (it.errorEvent as ErrorEvent.UnknownError).message).isTrue
+                assertThat(unknownError == (it.errorUiEvent?.getContentIfNotHandled() as ErrorEvent.UnknownError).message).isTrue
             }
         }
 
@@ -277,15 +276,6 @@ class SearchViewModelTest {
             viewModel.onUiEvent(OnSelectDecline)
             viewModel.viewState.take(1).collectLatest {
                 assertThat(it.isDialogShowing).isFalse
-            }
-        }
-
-    @Test
-    fun `When OnErrorSnakeBarDismissed is happened, Then in viewState errorEvent become null`() =
-        runTest {
-            viewModel.onUiEvent(OnErrorSnakeBarDismissed)
-            viewModel.viewState.take(1).collectLatest {
-                assertThat(it.errorEvent == null).isTrue
             }
         }
 

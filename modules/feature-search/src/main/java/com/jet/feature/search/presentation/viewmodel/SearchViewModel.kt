@@ -19,6 +19,7 @@ package com.jet.feature.search.presentation.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.example.core.navigation.Navigator
 import com.example.core.resProvider.ResourceProvider
+import com.example.core.state.Event
 import com.example.core.state.Output.NetworkError
 import com.example.core.state.Output.Success
 import com.example.core.state.Output.UnknownError
@@ -28,14 +29,13 @@ import com.example.core.viewmodel.ErrorEvent
 import com.jet.detail.presentation.DetailLauncher
 import com.wasim.feature.search.BuildConfig.DEBOUNCE_TIME
 import com.jet.feature.search.domain.usecase.SearchUseCase
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnInitViewModel
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnPhotoClicked
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnQueryClearClicked
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSearch
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSelectConfirmed
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSelectDecline
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnInitViewModel
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnPhotoClicked
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnQueryClearClicked
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSearch
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSelectConfirmed
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSelectDecline
 import com.jet.feature.search.presentation.viewmodel.SearchContract.FRUITS
 import com.jet.feature.search.presentation.viewmodel.SearchContract.State
 import com.jet.search.domain.model.Photo
@@ -56,7 +56,7 @@ class SearchViewModel @Inject constructor(
     private val resourceProvider: ResourceProvider,
     private val navigator: Navigator,
     private val detailLauncher: DetailLauncher,
-) : BaseViewModel<Event, State>() {
+) : BaseViewModel<UiEvent, State>() {
 
     override fun provideInitialState() = State()
 
@@ -67,7 +67,7 @@ class SearchViewModel @Inject constructor(
         onUiEvent(OnInitViewModel)
     }
 
-    override fun handleEvent(event: Event) {
+    override fun handleEvent(event: UiEvent) {
         when (event) {
             is OnInitViewModel -> {
                 startQuery()
@@ -93,9 +93,6 @@ class SearchViewModel @Inject constructor(
             }
             is OnSelectDecline -> {
                 updateState { copy(isDialogShowing = false) }
-            }
-            is OnErrorSnakeBarDismissed -> {
-                updateState { copy(errorEvent = null) }
             }
         }
     }
@@ -131,8 +128,10 @@ class SearchViewModel @Inject constructor(
                         NetworkError -> {
                             updateState {
                                 copy(
-                                    errorEvent = ErrorEvent.NetworkError(
-                                        resourceProvider.getString(string.network_error)
+                                    errorUiEvent = Event(
+                                        ErrorEvent.NetworkError(
+                                            resourceProvider.getString(string.network_error)
+                                        )
                                     )
                                 )
                             }
@@ -140,8 +139,10 @@ class SearchViewModel @Inject constructor(
                         UnknownError -> {
                             updateState {
                                 copy(
-                                    errorEvent = ErrorEvent.UnknownError(
-                                        resourceProvider.getString(string.unknown_error)
+                                    errorUiEvent = Event(
+                                        ErrorEvent.UnknownError(
+                                            resourceProvider.getString(string.unknown_error)
+                                        )
                                     )
                                 )
                             }

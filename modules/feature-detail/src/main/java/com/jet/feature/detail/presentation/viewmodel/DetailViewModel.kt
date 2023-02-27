@@ -18,19 +18,19 @@ package com.jet.feature.detail.presentation.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.example.core.R
+import com.example.core.R.string
 import com.example.core.navigation.Navigator
 import com.example.core.resProvider.ResourceProvider
+import com.example.core.state.Event
 import com.example.core.state.Output.Success
 import com.example.core.state.Output.UnknownError
 import com.example.core.viewmodel.BaseViewModel
 import com.example.core.viewmodel.ErrorEvent
 import com.jet.feature.detail.domain.usecase.DetailUseCase
 import com.jet.feature.detail.presentation.launcher.DetailLauncherImpl.Companion.LOCAL_ID
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnBackButtonClicked
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnErrorSnakeBarDismissed
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnViewModelInit
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent.OnBackButtonClicked
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent.OnViewModelInit
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.State
 import com.jet.search.presentation.mapper.toPhotoUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,18 +43,17 @@ class DetailViewModel @Inject constructor(
     private val navigator: Navigator,
     private val resourceProvider: ResourceProvider,
     private val savedStateHandle: SavedStateHandle,
-) : BaseViewModel<Event, State>() {
+) : BaseViewModel<UiEvent, State>() {
 
     override fun provideInitialState() = State()
     private val id: String by lazy {
         savedStateHandle.get<String>(LOCAL_ID).orEmpty()
     }
 
-    override fun handleEvent(event: Event) {
+    override fun handleEvent(event: UiEvent) {
         when (event) {
             is OnViewModelInit -> getSelectedPhoto(event.id)
             is OnBackButtonClicked -> navigator.navigateUp()
-            is OnErrorSnakeBarDismissed -> updateState { copy(errorEvent = null) }
         }
     }
 
@@ -72,8 +71,10 @@ class DetailViewModel @Inject constructor(
                     }
                     is UnknownError -> updateState {
                         copy(
-                            errorEvent = ErrorEvent.UnknownError(
-                                resourceProvider.getString(R.string.unknown_error_detail)
+                            errorUiEvent = Event(
+                                ErrorEvent.UnknownError(
+                                    resourceProvider.getString(string.unknown_error_detail)
+                                )
                             )
                         )
                     }

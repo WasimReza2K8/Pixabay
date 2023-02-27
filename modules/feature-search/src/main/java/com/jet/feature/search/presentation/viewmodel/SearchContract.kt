@@ -16,6 +16,7 @@
 
 package com.jet.feature.search.presentation.viewmodel
 
+import com.example.core.state.Event
 import com.example.core.viewmodel.ErrorEvent
 import com.example.core.viewmodel.ViewEvent
 import com.example.core.viewmodel.ViewState
@@ -30,16 +31,15 @@ object SearchContract {
         val infoText: String = "",
         val isDialogShowing: Boolean = false,
         val photos: List<PhotoUiModel> = emptyList(),
-        val errorEvent: ErrorEvent? = null,
+        val errorUiEvent: Event<ErrorEvent>? = null,
     ) : ViewState
 
-    sealed interface Event : ViewEvent {
-        data class OnSearch(val query: String) : Event
-        object OnQueryClearClicked : Event
-        object OnInitViewModel : Event
-        data class OnPhotoClicked(val selectedId: String) : Event
-        object OnSelectConfirmed : Event
-        object OnSelectDecline : Event
-        object OnErrorSnakeBarDismissed : Event
+    sealed interface UiEvent : ViewEvent {
+        data class OnSearch(val query: String) : UiEvent
+        object OnQueryClearClicked : UiEvent
+        object OnInitViewModel : UiEvent
+        data class OnPhotoClicked(val selectedId: String) : UiEvent
+        object OnSelectConfirmed : UiEvent
+        object OnSelectDecline : UiEvent
     }
 }

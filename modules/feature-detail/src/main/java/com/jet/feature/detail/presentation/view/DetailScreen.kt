@@ -47,9 +47,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.theme.WasimTheme
 import com.example.core.ui.views.ErrorSnakeBar
 import com.example.core.ui.views.PhotoWithInfoView
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnBackButtonClicked
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.Event.OnErrorSnakeBarDismissed
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent.OnBackButtonClicked
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.State
 import com.jet.feature.detail.presentation.viewmodel.DetailViewModel
 import com.wasim.feature.detail.R
@@ -66,15 +65,13 @@ fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {
 @Composable
 private fun DetailScreenImpl(
     state: State,
-    sendEvent: (event: Event) -> Unit,
+    sendEvent: (uiEvent: UiEvent) -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
     ErrorSnakeBar(
-        errorEvent = state.errorEvent,
+        errorEvent = state.errorUiEvent?.getContentIfNotHandled(),
         snackBarHostState = snackBarHostState,
-        sendEvent = sendEvent,
-        snakeBarDismissedEvent = OnErrorSnakeBarDismissed,
     )
 
     Scaffold(scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState)) { scaffoldPadding ->

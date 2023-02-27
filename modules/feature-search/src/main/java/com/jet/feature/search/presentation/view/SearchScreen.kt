@@ -22,13 +22,12 @@ import com.example.core.ui.theme.WasimTheme
 import com.example.core.ui.views.ErrorSnakeBar
 import com.example.core.ui.views.SearchBar
 import com.wasim.feature.search.R
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnErrorSnakeBarDismissed
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnPhotoClicked
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnQueryClearClicked
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSearch
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSelectConfirmed
-import com.jet.feature.search.presentation.viewmodel.SearchContract.Event.OnSelectDecline
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnPhotoClicked
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnQueryClearClicked
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSearch
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSelectConfirmed
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSelectDecline
 import com.jet.feature.search.presentation.viewmodel.SearchContract.State
 import com.jet.feature.search.presentation.viewmodel.SearchViewModel
 
@@ -44,15 +43,13 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
 @Composable
 private fun SearchScreenImpl(
     state: State,
-    sendEvent: (event: Event) -> Unit,
+    sendEvent: (uiEvent: UiEvent) -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
 
     ErrorSnakeBar(
-        errorEvent = state.errorEvent,
+        errorEvent = state.errorUiEvent?.getContentIfNotHandled(),
         snackBarHostState = snackBarHostState,
-        sendEvent = sendEvent,
-        snakeBarDismissedEvent = OnErrorSnakeBarDismissed,
     )
     Scaffold(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState),
@@ -109,7 +106,7 @@ private fun SearchScreenImpl(
 }
 
 @Composable
-fun Dialog(sendEvent: (event: Event) -> Unit) {
+fun Dialog(sendEvent: (uiEvent: UiEvent) -> Unit) {
     SelectionDialog(
         title = stringResource(id = R.string.search_confirmation),
         text = stringResource(id = R.string.search_confirmation_detail),
