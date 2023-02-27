@@ -63,5 +63,6 @@ The following tools and technologies are used to implement the solution:
 Note: 
 - To run the app please add your API_KEY in your local.properties file like following:
 `API_KEY=your_api_key`
+You can collect your api key from [this website](https://pixabay.com/api/docs/#api_search_images).
 - To run the integration test there is Build Variant called "UITest" which needs to be enable.
 UITest variant cannot run unit test. To run unit test "debug" needs to be used.
