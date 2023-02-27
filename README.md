@@ -60,5 +60,8 @@ The following tools and technologies are used to implement the solution:
 <img src="images/land-3.jpeg" width="200">
 </p>
 
-Note: To run the integration test there is Build Variant called "UITest" which needs to be enable.
+Note: 
+- To run the app please add your API_KEY in your local.properties file like following:
+`API_KEY=your_api_key`
+- To run the integration test there is Build Variant called "UITest" which needs to be enable.
 UITest variant cannot run unit test. To run unit test "debug" needs to be used.
