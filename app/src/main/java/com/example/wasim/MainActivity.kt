@@ -3,16 +3,18 @@ package com.example.wasim
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.core.navigation.Navigator
 import com.example.core.navigation.NavigatorEvent
 import com.example.core.ui.theme.WasimTheme
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -26,12 +28,13 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var featureProvider: FeatureProvider
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             WasimTheme {
                 AppContent(
-                    rememberNavController(),
+                    rememberAnimatedNavController(),
                     navigator,
                     featureProvider,
                 )
@@ -50,12 +53,13 @@ fun AppContent(
     WasimTheme {
         val keyboardController = LocalSoftwareKeyboardController.current
         LaunchedEffect(navHostController) {
-            navigator.destinations.onEach { event ->
-                Timber.d(
-                    "backQueue = ${navHostController.backQueue.map { "route = ${it.destination.route}" }}"
-                )
-                keyboardController?.hide()
-                event?.let { navigationEvent ->
+            navigator.destinations
+                .filterNotNull()
+                .onEach { navigationEvent ->
+                    Timber.d(
+                        "backQueue = ${navHostController.backQueue.map { "route = ${it.destination.route}" }}"
+                    )
+                    keyboardController?.hide()
                     when (navigationEvent) {
                         is NavigatorEvent.Directions -> navHostController.navigate(
                             navigationEvent.destination,
@@ -63,8 +67,7 @@ fun AppContent(
                         )
                         is NavigatorEvent.NavigateUp -> navHostController.navigateUp()
                     }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
         AppNavGraph(
             navController = navHostController,

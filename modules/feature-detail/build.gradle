@@ -25,6 +25,6 @@ dependencies {
     implementation project(':core-navigation')
     implementation project(':modules:feature-detail-shared')
     implementation project(':modules:feature-search-shared')
-
+    implementation libs.com.google.accompanist.navigation.animation
     implementation libs.bundles.coroutines
 }

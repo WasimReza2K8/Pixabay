@@ -32,6 +32,7 @@ dependencies {
     implementation project(':core-navigation')
 
     implementation libs.androidx.appcompat
+    implementation libs.com.google.accompanist.navigation.animation
 
     // androidTest
     debugImplementation libs.androidx.compose.ui.test.manifest

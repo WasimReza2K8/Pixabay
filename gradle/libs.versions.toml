@@ -61,6 +61,7 @@ com-gojuno-koptional = "1.7.0"
 com-google-accompanist-flowlayout = "0.27.0"
 com-google-accompanist-pager = "0.27.0"
 com-google-accompanist-pager-indicators = "0.27.0"
+com-google-accompanist-navigation-animation = "0.27.0"
 com-google-android-flexbox = "3.0.0"
 com-google-android-gms-play-services-auth = "19.2.0"
 com-google-android-gms-play-services-auth-api-phone = "17.5.1"
@@ -239,6 +240,7 @@ com-gojuno-koptional-rxjava2-extensions = { module = "com.gojuno.koptional:kopti
 com-google-accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "com-google-accompanist-flowlayout" }
 com-google-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "com-google-accompanist-pager" }
 com-google-accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "com-google-accompanist-pager-indicators" }
+com-google-accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "com-google-accompanist-navigation-animation" }
 com-google-android-flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "com-google-android-flexbox" }
 com-google-android-gms-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "com-google-android-gms-play-services-auth" }
 com-google-android-gms-play-services-auth-api-phone = { module = "com.google.android.gms:play-services-auth-api-phone", version.ref = "com-google-android-gms-play-services-auth-api-phone" }

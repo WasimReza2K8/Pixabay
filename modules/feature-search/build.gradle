@@ -41,6 +41,7 @@ dependencies {
     implementation project(':modules:feature-search-shared')
     implementation project(':modules:feature-detail-shared')
 
+    implementation libs.com.google.accompanist.navigation.animation
     implementation libs.kotlinx.serialization
     implementation libs.bundles.coroutines
     implementation libs.com.squareup.retrofit

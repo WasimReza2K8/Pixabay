@@ -1,16 +1,18 @@
 package com.example.wasim
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import com.example.core.navigation.register
+import com.google.accompanist.navigation.animation.AnimatedNavHost
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
     featureProvider: FeatureProvider,
 ) {
-    NavHost(
+    AnimatedNavHost(
         navController = navController,
         startDestination = featureProvider.searchLauncher.route()
     ) {
