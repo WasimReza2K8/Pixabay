@@ -34,6 +34,8 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.com.google.accompanist.navigation.animation
 
+    debugImplementation libs.com.squareup.leakcanary.android
+
     // androidTest
     debugImplementation libs.androidx.compose.ui.test.manifest
     androidTestImplementation libs.androidx.compose.ui.test.junit4
