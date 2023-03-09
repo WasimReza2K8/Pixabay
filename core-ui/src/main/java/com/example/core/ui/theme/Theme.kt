@@ -32,22 +32,22 @@ private val LightColorPalette = lightColors(
 )
 
 private val LocalSpacings = compositionLocalOf<Spacing> {
-    error("No spacings provided! Make sure to wrap all components in an JetTheme.")
+    error("No spacings provided! Make sure to wrap all components in an WasimTheme.")
 }
 private val LocalColors = compositionLocalOf<Color> {
-    error("No colors provided! Make sure to wrap all components in an JetTheme.")
+    error("No colors provided! Make sure to wrap all components in an WasimTheme.")
 }
 
 private val LocalTypography = compositionLocalOf<Typography> {
-    error("No typography provided! Make sure to wrap all components in an JetTheme.")
+    error("No typography provided! Make sure to wrap all components in an WasimTheme.")
 }
 
 private val LocalElevations = compositionLocalOf<Elevation> {
-    error("No elevation provided! Make sure to wrap all components in an JetTheme.")
+    error("No elevation provided! Make sure to wrap all components in an WasimTheme.")
 }
 
 private val LocalShapes = compositionLocalOf<Shape> {
-    error("No shape provided! Make sure to wrap all components in an JetTheme.")
+    error("No shape provided! Make sure to wrap all components in an WasimTheme.")
 }
 
 @Composable
