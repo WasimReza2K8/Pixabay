@@ -43,7 +43,6 @@ The following tools and technologies are used to implement the solution:
 - mockk
 - turbine
 - Espresso
-- chucker
 - detekt
 - ktlint
 

@@ -23,15 +23,14 @@ import com.example.core.navigation.Navigator
 import com.example.core.resProvider.ResourceProvider
 import com.example.core.state.Event
 import com.example.core.state.Output.Success
-import com.example.core.state.Output.UnknownError
 import com.example.core.viewmodel.BaseViewModel
 import com.example.core.viewmodel.ErrorEvent
 import com.jet.feature.detail.domain.usecase.DetailUseCase
 import com.jet.feature.detail.presentation.launcher.DetailLauncherImpl.Companion.LOCAL_ID
+import com.jet.feature.detail.presentation.viewmodel.DetailContract.State
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent.OnBackButtonClicked
 import com.jet.feature.detail.presentation.viewmodel.DetailContract.UiEvent.OnViewModelInit
-import com.jet.feature.detail.presentation.viewmodel.DetailContract.State
 import com.jet.search.presentation.mapper.toPhotoUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -66,10 +65,10 @@ class DetailViewModel @Inject constructor(
                 when (output) {
                     is Success -> updateState {
                         copy(
-                            photo = output.result?.toPhotoUiModel(),
+                            photo = output.result.toPhotoUiModel(),
                         )
                     }
-                    is UnknownError -> updateState {
+                    else -> updateState {
                         copy(
                             errorUiEvent = Event(
                                 ErrorEvent.UnknownError(
@@ -77,9 +76,6 @@ class DetailViewModel @Inject constructor(
                                 )
                             )
                         )
-                    }
-                    else -> {
-                        // no other error possible here
                     }
                 }
             }

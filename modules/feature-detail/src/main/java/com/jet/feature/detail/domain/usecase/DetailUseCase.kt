@@ -34,7 +34,7 @@ class DetailUseCase @Inject constructor(
     private val repository: SearchRepository,
     private val dispatcherProvider: BaseDispatcherProvider,
 ) {
-    operator fun invoke(id: String): Flow<Output<Photo?>> =
+    operator fun invoke(id: String): Flow<Output<Photo>> =
         repository.getPhotoById(id).map {
             getOutput(it)
         }.catch {
