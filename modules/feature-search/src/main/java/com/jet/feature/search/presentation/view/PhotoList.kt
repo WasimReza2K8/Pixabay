@@ -1,6 +1,7 @@
 package com.jet.feature.search.presentation.view
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,9 +20,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.example.core.ui.theme.WasimTheme
-import com.wasim.feature.search.R.string
 import com.jet.search.presentation.model.PhotoUiModel
+import com.wasim.feature.search.R.string
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PhotoList(
     photos: List<PhotoUiModel>,
@@ -35,8 +37,12 @@ fun PhotoList(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        items(items = photos) { item ->
-            PhotoListItem(photo = item, onClick = onItemClick)
+        items(items = photos, key = { it.id }) { item ->
+            PhotoListItem(
+                photo = item,
+                onClick = onItemClick,
+                modifier = modifier.animateItemPlacement()
+            )
         }
     }
 }
