@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.room.Room.databaseBuilder
 import com.jet.feature.search.data.datasource.api.PixaBayApi
 import com.jet.feature.search.data.datasource.db.PhotoDB
-import com.jet.feature.search.data.datasource.db.dao.PhotoDao
 import com.jet.feature.search.data.repository.SearchRepositoryImpl
 import com.jet.feature.search.presentation.launcher.SearchLauncherImpl
 import com.jet.search.domain.repository.SearchRepository
@@ -67,8 +66,4 @@ object SearchDataModule {
             PhotoDB::class.java,
             DATABASE_NAME
         ).fallbackToDestructiveMigration().build()
-
-    @Singleton
-    @Provides
-    fun provideDao(database: PhotoDB): PhotoDao = database.photoDao()
 }

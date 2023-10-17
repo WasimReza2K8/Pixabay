@@ -3,9 +3,13 @@ package com.jet.feature.search.presentation.view
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +23,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import com.example.core.ui.theme.WasimTheme
 import com.jet.search.presentation.model.PhotoUiModel
 import com.wasim.feature.search.R.string
@@ -26,7 +33,7 @@ import com.wasim.feature.search.R.string
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PhotoList(
-    photos: List<PhotoUiModel>,
+    photos: LazyPagingItems<PhotoUiModel>,
     onItemClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -37,15 +44,67 @@ fun PhotoList(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        items(items = photos, key = { it.id }) { item ->
-            PhotoListItem(
-                photo = item,
-                onClick = onItemClick,
-                modifier = modifier.animateItemPlacement()
-            )
+        items(count = photos.itemCount) { index ->
+            photos[index]?.let {
+                PhotoListItem(
+                    photo = it,
+                    onClick = onItemClick,
+                    modifier = modifier.animateItemPlacement()
+                )
+            }
+        }
+        handlePagination(photos = photos)
+    }
+}
+
+private fun LazyListScope.handlePagination(
+    photos: LazyPagingItems<PhotoUiModel>,
+) {
+    photos.apply {
+        when {
+            loadState.refresh is LoadState.Loading -> {
+                item { LoadingScreen() }
+            }
+
+            loadState.refresh is LoadState.Error -> {
+                val error = loadState.refresh as LoadState.Error
+                item {
+                    ErrorMessage(
+                        modifier = Modifier.fillMaxSize(),
+                        message = error.error.localizedMessage!!,
+                        onClickRetry = { retry() })
+                }
+            }
+
+            loadState.append is LoadState.Loading -> {
+                item {
+                    LoadingNextPageItem(modifier = Modifier)
+                }
+            }
+
+            loadState.append is LoadState.Error -> {
+                val error = loadState.append as LoadState.Error
+                item {
+                    ErrorMessage(
+                        modifier = Modifier,
+                        message = error.error.localizedMessage!!,
+                        onClickRetry = { retry() })
+                }
+            }
         }
     }
 }
+
+@Composable
+fun LoadingNextPageItem(modifier: Modifier) {
+    CircularProgressIndicator(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .wrapContentWidth(Alignment.CenterHorizontally)
+    )
+}
+
 
 @Composable
 private fun getPadding(): Dp {
@@ -62,6 +121,7 @@ private fun getPadding(): Dp {
         Configuration.ORIENTATION_LANDSCAPE -> {
             WasimTheme.spacing.spacing80
         }
+
         else -> {
             WasimTheme.spacing.spacing0
         }

@@ -16,26 +16,30 @@
 
 package com.jet.feature.search.presentation.viewmodel
 
+import androidx.paging.PagingData
 import com.example.core.state.Event
 import com.example.core.viewmodel.ErrorEvent
 import com.example.core.viewmodel.ViewEvent
 import com.example.core.viewmodel.ViewState
 import com.jet.search.presentation.model.PhotoUiModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 object SearchContract {
-    internal const val FRUITS = "fruits"
+    internal const val BERLIN = "Berlin"
 
     data class State(
         val isLoading: Boolean = false,
-        val query: String = FRUITS,
+        val query: String = "",
         val infoText: String = "",
         val isDialogShowing: Boolean = false,
-        val photos: List<PhotoUiModel> = emptyList(),
+        val photos: Flow<PagingData<PhotoUiModel>> = emptyFlow(),
         val errorUiEvent: Event<ErrorEvent>? = null,
     ) : ViewState
 
     sealed interface UiEvent : ViewEvent {
         data class OnSearch(val query: String) : UiEvent
+        object OnActivityStarted : UiEvent
         object OnQueryClearClicked : UiEvent
         object OnInitViewModel : UiEvent
         data class OnPhotoClicked(val selectedId: String) : UiEvent

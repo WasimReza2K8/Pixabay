@@ -30,4 +30,5 @@ android {
 
 dependencies {
     implementation project(path: ':core-navigation')
+    implementation libs.androidx.paging
 }

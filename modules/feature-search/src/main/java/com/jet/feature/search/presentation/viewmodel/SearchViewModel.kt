@@ -16,52 +16,44 @@
 
 package com.jet.feature.search.presentation.viewmodel
 
-import androidx.lifecycle.viewModelScope
+import androidx.paging.map
 import com.example.core.navigation.Navigator
-import com.example.core.resProvider.ResourceProvider
-import com.example.core.state.Event
-import com.example.core.state.Output.NetworkError
-import com.example.core.state.Output.Success
-import com.example.core.state.Output.UnknownError
-import com.example.core.ui.R.string
 import com.example.core.viewmodel.BaseViewModel
-import com.example.core.viewmodel.ErrorEvent
 import com.jet.detail.presentation.DetailLauncher
-import com.wasim.feature.search.BuildConfig.DEBOUNCE_TIME
 import com.jet.feature.search.domain.usecase.SearchUseCase
+import com.jet.feature.search.presentation.viewmodel.SearchContract.BERLIN
+import com.jet.feature.search.presentation.viewmodel.SearchContract.State
 import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent
+import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnActivityStarted
 import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnInitViewModel
 import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnPhotoClicked
 import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnQueryClearClicked
 import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSearch
 import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSelectConfirmed
 import com.jet.feature.search.presentation.viewmodel.SearchContract.UiEvent.OnSelectDecline
-import com.jet.feature.search.presentation.viewmodel.SearchContract.FRUITS
-import com.jet.feature.search.presentation.viewmodel.SearchContract.State
-import com.jet.search.domain.model.Photo
 import com.jet.search.presentation.mapper.toPhotoUiModel
+import com.wasim.feature.search.BuildConfig.DEBOUNCE_TIME
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchUseCase: SearchUseCase,
-    private val resourceProvider: ResourceProvider,
     private val navigator: Navigator,
     private val detailLauncher: DetailLauncher,
 ) : BaseViewModel<UiEvent, State>() {
 
     override fun provideInitialState() = State()
 
-    private val searchQuery: Channel<String> = Channel()
+    private val searchQuery = MutableSharedFlow<String>(replay = 1)
     private var selectedId: String? = null
+
 
     init {
         onUiEvent(OnInitViewModel)
@@ -71,19 +63,23 @@ class SearchViewModel @Inject constructor(
         when (event) {
             is OnInitViewModel -> {
                 startQuery()
-                viewModelScope.launch {
-                    onUiEvent(OnSearch(FRUITS))
-                }
             }
+
+            is OnActivityStarted -> {
+                onUiEvent(OnSearch(BERLIN))
+            }
+
             is OnSearch -> {
                 updateState { copy(query = event.query) }
-                searchQuery.trySend(event.query)
+                searchQuery.tryEmit(event.query)
             }
-            is OnQueryClearClicked -> updateState { copy(query = "", photos = emptyList()) }
+
+            is OnQueryClearClicked -> updateState { copy(query = "") }
             is OnPhotoClicked -> {
                 selectedId = event.selectedId
                 updateState { copy(isDialogShowing = true) }
             }
+
             is OnSelectConfirmed -> {
                 updateState { copy(isDialogShowing = false) }
                 selectedId?.let {
@@ -91,6 +87,7 @@ class SearchViewModel @Inject constructor(
                 }
                 selectedId = null
             }
+
             is OnSelectDecline -> {
                 updateState { copy(isDialogShowing = false) }
             }
@@ -98,77 +95,21 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun startQuery() {
-        viewModelScope.launch {
-            searchQuery
-                .receiveAsFlow()
-                .debounce(DEBOUNCE_TIME)
-                .distinctUntilChanged()
-                .filter { query ->
-                    if (query.isEmpty()) {
-                        updateState {
-                            copy(
-                                infoText = resourceProvider.getString(string.search_not_started),
-                                photos = emptyList(),
-                            )
-                        }
-                        return@filter false
-                    } else {
-                        return@filter true
+        updateState {
+            copy(
+                photos = searchQuery
+                    .debounce(DEBOUNCE_TIME)
+                    .distinctUntilChanged()
+                    .filter { query ->
+                        return@filter query.isNotEmpty()
                     }
-                }
-                .flatMapLatest { query ->
-                    updateState { copy(isLoading = true) }
-                    searchUseCase(query)
-                }.collect { output ->
-                    updateState { copy(isLoading = false) }
-                    when (output) {
-                        is Success -> {
-                            handleSuccess(output)
-                        }
-                        NetworkError -> {
-                            updateState {
-                                copy(
-                                    errorUiEvent = Event(
-                                        ErrorEvent.NetworkError(
-                                            resourceProvider.getString(string.network_error)
-                                        )
-                                    )
-                                )
+                    .flatMapLatest { query ->
+                        searchUseCase(query)
+                            .map { paginatedPhoto ->
+                                paginatedPhoto.map { it.toPhotoUiModel() }
                             }
-                        }
-                        UnknownError -> {
-                            updateState {
-                                copy(
-                                    errorUiEvent = Event(
-                                        ErrorEvent.UnknownError(
-                                            resourceProvider.getString(string.unknown_error)
-                                        )
-                                    )
-                                )
-                            }
-                        }
                     }
-                }
-        }
-    }
-
-    private fun handleSuccess(output: Success<List<Photo>>) {
-        if (output.result.isEmpty()) {
-            updateState {
-                copy(
-                    infoText = resourceProvider.getString(string.no_photo),
-                    photos = emptyList()
-                )
-            }
-        } else {
-            updateState {
-                copy(
-                    infoText = "",
-                    photos = output.result.map {
-                        it.toPhotoUiModel()
-                    }
-                )
-            }
+            )
         }
     }
 }

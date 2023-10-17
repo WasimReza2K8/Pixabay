@@ -15,6 +15,8 @@ androidx-camerax = "1.1.0-rc01"
 androidx-compose-bom = "2023.01.00"
 androidx-constraintlayout = "2.1.3"
 androidx-constraintlayout-compose = "1.0.0-beta02"
+androidx-paging = "3.1.1"
+androidx-paging-compose = "1.0.0-alpha16"
 androidx-coordinatorlayout = "1.2.0"
 androidx-core-ktx = "1.7.0"
 androidx-customlayout-poolingcontainer = "1.0.0"
@@ -188,6 +190,9 @@ androidx-room-runtime = {module = "androidx.room:room-runtime", version.ref ="an
 androidx-room-compiler = {module = "androidx.room:room-compiler", version.ref ="androidx-room"}
 androidx-room-ktx = {module = "androidx.room:room-ktx", version.ref ="androidx-room"}
 androidx-room-testing = {module = "androidx.room:room-testing", version.ref ="androidx-room"}
+androidx-room-paging = {module = "androidx.room:room-paging", version.ref ="androidx-room"}
+androidx-paging = { module = "androidx.paging:paging-runtime-ktx", version.ref = "androidx-paging" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "androidx-paging-compose" }
 
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test-core" }
 androidx-test-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "androidx-test-espresso" }
